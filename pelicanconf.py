@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*- #
 from __future__ import unicode_literals
 
-AUTHOR = 'reederz'
+AUTHOR = 'Justas Ažna'
 SITENAME = 'reederz'
 SITEURL = 'http://reederz.com'
 
@@ -20,6 +20,8 @@ CATEGORY_FEED_ATOM = None
 TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
+
+LINKS = (('fadeit', 'http://fadeit.dk/en',),)
 
 
 # Social widget
