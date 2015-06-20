@@ -54,3 +54,9 @@ docs/_build/
 
 # virtualenv
 venv/
+
+# gh-pages
+output/
+
+# Pelican
+*.pid
