@@ -15,7 +15,7 @@ DEFAULT_LANG = 'en'
 THEME = '../pelican-themes/pelican-bootstrap3'
 
 # Feed generation is usually not desired when developing
-FEED_ALL_ATOM = 'feeds/all.atom.xml'
+FEED_ALL_ATOM = None
 CATEGORY_FEED_ATOM = None
 TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
@@ -30,13 +30,8 @@ SOCIAL = (('github', 'https://github.com/reederz'),
           ('+justas', 'https://onename.com/justas'),
           ('keybase.io/reederz', 'https://keybase.io/reederz'),)
 
-# Comments
-DISQUS_SITENAME = "reederz"
-
-# Analytics
-GOOGLE_ANALYTICS = "UA-56922833-2"
 
 DEFAULT_PAGINATION = 10
 
 # Uncomment following line if you want document-relative URLs when developing
-#RELATIVE_URLS = True
+RELATIVE_URLS = True
