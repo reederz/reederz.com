@@ -26,6 +26,5 @@ DISQUS_SITENAME = "reederz"
 # Analytics
 GOOGLE_ANALYTICS = "UA-56922833-2"
 
-# Custom gh-pages domain
-STATIC_PATHS = ['images', 'extra/CNAME']
-EXTRA_PATH_METADATA = {'extra/CNAME': {'path': 'CNAME'},}
+STATIC_PATHS = ['images', 'extra', 'docs']
+EXTRA_PATH_METADATA = {'extra/CNAME': {'path': 'CNAME'}}
