@@ -15,6 +15,10 @@ DEFAULT_LANG = 'en'
 THEME = '../pelican-themes/pelican-bootstrap3'
 PLUGIN_PATHS = ['../pelican-plugins']
 PLUGINS = ['sitemap', 'tag_cloud']
+
+STATIC_PATHS = ['images', 'extra', 'docs']
+EXTRA_PATH_METADATA = {'extra/CNAME': {'path': 'CNAME'}}
+
 TYPOGRIFY = True
 
 SITEMAP = {
