@@ -14,7 +14,7 @@ DEFAULT_LANG = 'en'
 
 THEME = '../pelican-themes/pelican-bootstrap3'
 PLUGIN_PATHS = ['../pelican-plugins']
-PLUGINS = ['sitemap']
+PLUGINS = ['sitemap', 'tag_cloud']
 
 SITEMAP = {
     'format': 'xml',
