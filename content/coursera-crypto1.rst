@@ -20,7 +20,7 @@ At the end of 6 weeks we had the final exam where we reviewed what we have done 
 The main takeaways for me are:
 
 - never roll your own crypto
-- don't even try to implement crypto standards- stick to standard peer-reviewed and battle-tested implementations
+- don't even try to implement crypto standards- stick to standard, peer-reviewed and battle-tested implementations
 - paranoia level up
 
 While this course is really fun, it's not something that you can do casually. It would take me 6-12 quality hours every week to watch the lectures and finish the course work. It's actually my second attempt- the first time I gave up because my schedule was too hectic and I didn't want to invest half ass effort into this (all or nothing :).
