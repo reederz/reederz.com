@@ -43,6 +43,7 @@ LINKS = (('fadeit', 'http://fadeit.dk/en',),)
 # Social widget
 SOCIAL = (('github', 'https://github.com/reederz'),
           ('twitter', 'https://twitter.com/reederz'),
+          ('reddit', 'https://reddit.com/u/reederz'),
           ('+justas', 'https://onename.com/justas'),
           ('keybase.io/reederz', 'https://keybase.io/reederz'),)
 
