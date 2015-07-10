@@ -12,12 +12,25 @@ TIMEZONE = 'Europe/Copenhagen'
 
 DEFAULT_LANG = 'en'
 
-THEME = '../pelican-themes/pelican-bootstrap3'
+THEME = '../pelican-themes/voidy-bootstrap'
 PLUGIN_PATHS = ['../pelican-plugins']
 PLUGINS = ['sitemap', 'tag_cloud']
 
 STATIC_PATHS = ['images', 'extra', 'docs']
 EXTRA_PATH_METADATA = {'extra/CNAME': {'path': 'CNAME'}}
+
+
+# voidy-bootstrap specific
+# SITESUBTITLE ='Sub-title that goes underneath site name in jumbotron.'
+SITETAG = "homepage"
+STYLESHEET_FILES = ("pygment.css", "voidybootstrap.css",)
+CUSTOM_ARTICLE_FOOTERS = ("taglist.html",)
+# Using cosmo theme from bootswatch
+BOOTSTRAP_STYLESHEET = 'bootstrap.min.css'
+# CUSTOM_SCRIPTS_ARTICLE = "sharing_scripts.html"
+SIDEBAR = "sidebar.html"
+SIDEBAR_HIDE_CATEGORIES = True
+# end of voidy-bootstrap specific
 
 TYPOGRIFY = True
 
@@ -42,15 +55,18 @@ TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
-LINKS = (('fadeit', 'http://fadeit.dk/en',),)
+LINKS = (('fadeit', 'http://fadeit.dk/en',),
+         ('onename.com/justas', 'https://onename.com/justas'),
+         ('keybase.io/reederz', 'https://keybase.io/reederz'),)
 
 
 # Social widget
-SOCIAL = (('github', 'https://github.com/reederz'),
-          ('twitter', 'https://twitter.com/reederz'),
-          ('reddit', 'https://reddit.com/u/reederz'),
-          ('+justas', 'https://onename.com/justas'),
-          ('keybase.io/reederz', 'https://keybase.io/reederz'),)
+SOCIAL = (('github', 'https://github.com/reederz',
+           'fa fa-github-square fa-fw fa-lg'),
+          ('twitter', 'https://twitter.com/reederz',
+           'fa fa-twitter-square fa-fw fa-lg'),
+          ('reddit', 'https://reddit.com/u/reederz',
+           'fa fa-reddit-square fa-fw fa-lg'),)
 
 
 DEFAULT_PAGINATION = 10
