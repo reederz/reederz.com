@@ -1,252 +1,230 @@
 <!DOCTYPE html>
-<html lang="en"
->
-<head>
-    <title>Hello World - reederz</title>
-    <!-- Using the latest rendering mode for IE -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="Justas Ažna" />
+    <meta name="generator" content="Pelican (VoidyBootstrap theme)" />
+
+    <title>Hello World - reederz</title>
+
+   
+ 
+        <link rel="stylesheet" href="http://reederz.com/theme/css/bootstrap.min.css" />
+      <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />  
 
 
+      <link rel="stylesheet" href="http://reederz.com/theme/css/pygment.css" />
+      <link rel="stylesheet" href="http://reederz.com/theme/css/voidybootstrap.css" />
 
-<link rel="canonical" href="http://reederz.com/hello-world.html">
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
 
-        <meta name="author" content="Justas Azna" />
-        <meta name="keywords" content="hello" />
-        <meta name="description" content="I’m a Web Developer, yet I’ve been postponing my site for years. I guess today is a good day to start." />
+    <link rel="shortcut icon" href="http://reederz.com/favicon.ico" />
+        <link href="http://reederz.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="reederz Atom Feed" />
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-        <meta property="og:site_name" content="reederz" />
-        <meta property="og:type" content="article"/>
-        <meta property="og:title" content="Hello World"/>
-        <meta property="og:url" content="http://reederz.com/hello-world.html"/>
-        <meta property="og:description" content="I’m a Web Developer, yet I’ve been postponing my site for years. I guess today is a good day to start."/>
-        <meta property="article:published_time" content="2015-06-20" />
-            <meta property="article:section" content="blog" />
-            <meta property="article:tag" content="hello" />
-            <meta property="article:author" content="Justas Azna" />
+  ga('create', 'UA-56922833-2', '');
+  ga('send', 'pageview');
 
+</script>
+  </head>
 
-    <!-- Bootstrap -->
-        <link rel="stylesheet" href="http://reederz.com/theme/css/bootstrap.min.css" type="text/css"/>
-    <link href="http://reederz.com/theme/css/font-awesome.min.css" rel="stylesheet">
+  <body>
+   
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="container">
+	   <div class="navbar-header">
+		<button type="button" class="navbar-toggle" 
+				data-toggle="collapse" data-target="#main-navbar-collapse">
+		  <span class="sr-only">Toggle navigation</span>
+		  <span class="icon-bar"></span>
+		  <span class="icon-bar"></span>
+		  <span class="icon-bar"></span>
+		</button>
+		<a class="navbar-brand" href="http://reederz.com/" rel="home">
+          <i class="fa fa-home fa-fw fa-lg"> </i> </a>
+       </div>
 
-    <link href="http://reederz.com/theme/css/pygments/native.css" rel="stylesheet">
-        <link href="http://reederz.com/theme/css/typogrify.css" rel="stylesheet">
-    <link rel="stylesheet" href="http://reederz.com/theme/css/style.css" type="text/css"/>
+      <div class="collapse navbar-collapse" id="main-navbar-collapse">
+        <ul class="nav navbar-nav">
+              <li>
+                <a href="http://reederz.com/pages/about.html">About</a>
+              </li>
+            <li class="divider"></li>
+            <li class="">
+              <a href="http://reederz.com/archives.html">Archives</a>
+            </li>
+          <li class="divider"></li>
+            <li><a href="http://reederz.com/feeds/all.atom.xml" 
+                   type="application/atom+xml" rel="alternate">
+                <i class="fa fa-rss fa-fw fa-lg"></i> </a></li>
+        </ul> <!-- /nav -->
+      </div> <!-- /navbar-collapse -->
+	  </div> <!-- /container -->
+    </nav> <!-- /navbar -->
 
-        <link href="http://reederz.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
-              title="reederz ATOM Feed"/>
+	<div class="jumbotron" id="overview">
+	  <div class="container">
+		<h1><a href="http://reederz.com/">reederz</a></h1>
+	  </div>
+	</div>
 
-</head>
-<body>
-
-<div class="navbar navbar-default navbar-fixed-top" role="navigation">
-	<div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a href="http://reederz.com/" class="navbar-brand">
-reederz            </a>
-        </div>
-        <div class="collapse navbar-collapse navbar-ex1-collapse">
-            <ul class="nav navbar-nav">
-                         <li><a href="http://reederz.com/pages/about.html">
-                             About
-                          </a></li>
-                        <li class="active">
-                            <a href="http://reederz.com/category/blog.html">Blog</a>
-                        </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-              <li><a href="http://reederz.com/archives.html"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
-            </ul>
-        </div>
-        <!-- /.navbar-collapse -->
-    </div>
-</div> <!-- /.navbar -->
-<!-- Banner -->
-<!-- End Banner -->
-<div class="container">
-    <div class="row">
-        <div class="col-sm-9">
-
-    <section id="content">
-        <article>
-            <header class="page-header">
-                <h1>
-                    <a href="http://reederz.com/hello-world.html"
-                       rel="bookmark"
-                       title="Permalink to Hello World">
-                        Hello&nbsp;World
-                    </a>
-                </h1>
-            </header>
-            <div class="entry-content">
-                <div class="panel">
-                    <div class="panel-body">
-<footer class="post-info">
-    <span class="label label-default">Date</span>
-    <span class="published">
-        <i class="fa fa-calendar"></i><time datetime="2015-06-20T23:53:00+02:00"> Sat 20 June 2015</time>
-    </span>
-
-
-
-<span class="label label-default">Tags</span>
-	<a href="http://reederz.com/tag/hello.html">hello</a>
-    
-</footer><!-- /.post-info -->                    </div>
-                </div>
-                <p>I&#8217;m particularly bored today. Not that I don&#8217;t have anything to do, it&#8217;s just that I don&#8217;t want to do anything. F*** it, I&#8217;ll start a blog. It&#8217;s been long overdue anyway. Honestly, I&#8217;ve tried launching my personal site 5 times in the past. I&#8217;d dig up some new web framework, program the blogging software and give up before the launch. In retrospect, back then, I was only interested in learning the particular frameworks/languages and not so much in blogging. But it&#8217;s different&nbsp;now.(..?)</p>
+    <div class="container" id="main-container">
+      <div class="row">
+        <div class="col-md-9" id="content">
+<article itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+  <header class="article-header">
+<abbr class="article-header-date">
+  Sat 20 June 2015
+</abbr> <h1>
+  <a href="http://reederz.com/hello-world.html" rel="bookmark"
+     title="Permalink to Hello World">
+    Hello&nbsp;World
+  </a>
+</h1><div class="article-header-info">
+  <p>
+      Posted by <a href="http://reederz.com/author/justas-azna.html">Justas Azna</a>
+    in 
+    <a href="http://reederz.com/category/blog.html">
+      blog</a>
+    &nbsp;&nbsp;
+  </p>
+</div> <!-- /.article-header-info -->  </header>
+  <div class="content-body" itemprop="text articleBody">
+	<p>I&#8217;m particularly bored today. Not that I don&#8217;t have anything to do, it&#8217;s just that I don&#8217;t want to do anything. F*** it, I&#8217;ll start a blog. It&#8217;s been long overdue anyway. Honestly, I&#8217;ve tried launching my personal site 5 times in the past. I&#8217;d dig up some new web framework, program the blogging software and give up before the launch. In retrospect, back then, I was only interested in learning the particular frameworks/languages and not so much in blogging. But it&#8217;s different&nbsp;now.(..?)</p>
 <p>A bit about me: I&#8217;m a 24 year old dude who&#8217;s interested in software security, automation and semantic web. I spend most of my time hanging out at <a class="reference external" href="http://fadeit.dk/en">fadeit</a>, reading <a class="reference external" href="https://www.goodreads.com/book/show/68497.The_Scar">weird Sci-Fi books</a>, watching old movies and etc. Who knows, perhaps blogging will become my thing too (don&#8217;t expect any kind of&nbsp;regularity).</p>
 <p>Finally, I&#8217;m well aware that The Internet <a class="reference external" href="https://archive.org/">does not forget</a> so I&#8217;ll try to stay as <a class="reference external" href="https://en.wikipedia.org/wiki/PCU_%28film%29">politically correct</a> as&nbsp;possible.</p>
 <p>Cheers,</p>
 <p>Justas</p>
 
-            </div>
-            <!-- /.entry-content -->
-    <hr/>
-    <section class="comments" id="comments">
-        <h2>Comments</h2>
-
-        <div id="disqus_thread"></div>
-        <script type="text/javascript">
-            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-            var disqus_shortname = 'reederz'; // required: replace example with your forum shortname
-
-                    var disqus_identifier = 'hello-world';
-                var disqus_url = 'http://reederz.com/hello-world.html';
-
-            var disqus_config = function () {
-                this.language = "en";
-            };
-
-            /* * * DON'T EDIT BELOW THIS LINE * * */
-            (function () {
-                var dsq = document.createElement('script');
-                dsq.type = 'text/javascript';
-                dsq.async = true;
-                dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-            })();
-        </script>
-        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
-            Disqus.</a></noscript>
-        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-
-    </section>
-        </article>
-    </section>
-
-        </div>
-        <div class="col-sm-3" id="sidebar">
-            <aside>
-
-<section class="well well-sm">
-    <ul class="list-group list-group-flush">
-            <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
-              <ul class="list-group" id="social">
-                <li class="list-group-item"><a href="https://github.com/reederz"><i class="fa fa-github-square fa-lg"></i> github</a></li>
-                <li class="list-group-item"><a href="https://twitter.com/reederz"><i class="fa fa-twitter-square fa-lg"></i> twitter</a></li>
-                <li class="list-group-item"><a href="https://reddit.com/u/reederz"><i class="fa fa-reddit-square fa-lg"></i> reddit</a></li>
-                <li class="list-group-item"><a href="https://onename.com/justas"><i class="fa fa--plusjustas-square fa-lg"></i> +justas</a></li>
-                <li class="list-group-item"><a href="https://keybase.io/reederz"><i class="fa fa-keybase.io/reederz-square fa-lg"></i> keybase.io/reederz</a></li>
-              </ul>
-            </li>
-
-
-
-            <li class="list-group-item"><a href="http://reederz.com/"><h4><i class="fa fa-tags fa-lg"></i><span class="icon-label">Tags</span></h4></a>
-                <ul class="list-group " id="tags">
-                    <li class="list-group-item tag-4">
-                        <a href="http://reederz.com/tag/hello.html">
-                            hello
-                        </a>
-                    </li>
-                    <li class="list-group-item tag-4">
-                        <a href="http://reederz.com/tag/crypto.html">
-                            crypto
-                        </a>
-                    </li>
-                    <li class="list-group-item tag-4">
-                        <a href="http://reederz.com/tag/coursera.html">
-                            coursera
-                        </a>
-                    </li>
-                </ul>
-            </li>
-    <li class="list-group-item"><h4><i class="fa fa-external-link-square fa-lg"></i><span class="icon-label">Links</span></h4>
-      <ul class="list-group" id="links">
-        <li class="list-group-item">
-            <a href="http://fadeit.dk/en" target="_blank">
-                fadeit
-            </a>
-        </li>
-      </ul>
-    </li>
-    </ul>
-</section>
-            </aside>
-        </div>
-    </div>
+  </div>
+  
+<div class="article-tag-list">
+<span class="label label-default">Tags</span>
+	<a href="http://reederz.com/tag/hello.html"><i class="fa fa-tag"></i>hello</a>&nbsp;
 </div>
-<footer>
-   <div class="container">
-      <hr>
-      <div class="row">
-         <div class="col-xs-10">&copy; 2015 Justas Ažna
-            &middot; Powered by <a href="https://github.com/DandyDev/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
-            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
-            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
-         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
-      </div>
-   </div>
-</footer>
-<script src="http://reederz.com/theme/js/jquery.min.js"></script>
+  <div class="comments">
+	<h2>Comments</h2>
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+				   (function() {
+						var dsq = document.createElement('script');
+						dsq.type = 'text/javascript'; dsq.async = true;
+						dsq.src = '//reederz.disqus.com/embed.js';
+						(document.getElementsByTagName('head')[0] ||
+						 document.getElementsByTagName('body')[0]).appendChild(dsq);
+				  })();
+	</script>
+  </div>
+</article>
+        </div><!-- /content -->
 
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="http://reederz.com/theme/js/bootstrap.min.js"></script>
+        <div class="col-md-3 sidebar-nav" id="sidebar">
 
-<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
-<script src="http://reederz.com/theme/js/respond.min.js"></script>
+<div class="row">
 
-    <!-- Disqus -->
-    <script type="text/javascript">
-        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-        var disqus_shortname = 'reederz'; // required: replace example with your forum shortname
+<div class="col-xs-6 col-md-12">
+<h4><i class="fa fa-comment fa-fw fa-lg"></i> Social</h4>
+<ul class="list-unstyled social-links">
+    <li><a href="https://github.com/reederz" target="_blank">
+	  <i class="fa fa-github-square fa-fw fa-lg" title="github"></i>
+		github
+	</a></li>
+    <li><a href="https://twitter.com/reederz" target="_blank">
+	  <i class="fa fa-twitter-square fa-fw fa-lg" title="twitter"></i>
+		twitter
+	</a></li>
+    <li><a href="https://reddit.com/u/reederz" target="_blank">
+	  <i class="fa fa-reddit-square fa-fw fa-lg" title="reddit"></i>
+		reddit
+	</a></li>
+</ul>
+</div>
 
-        /* * * DON'T EDIT BELOW THIS LINE * * */
-        (function () {
-            var s = document.createElement('script');
-            s.async = true;
-            s.type = 'text/javascript';
-            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
-            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
-        }());
-    </script>
-    <!-- End Disqus Code -->
-    <!-- Google Analytics -->
-    <script type="text/javascript">
 
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-56922833-2']);
-        _gaq.push(['_trackPageview']);
+</div> <!-- /row -->
 
-        (function () {
-            var ga = document.createElement('script');
-            ga.type = 'text/javascript';
-            ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(ga, s);
-        })();
-    </script>
-    <!-- End Google Analytics Code -->
+<h4><i class="fa fa-link fa-fw fa-lg"></i> Links</h4>
+<ul class="list-unstyled category-links">
+  <li><a href=http://fadeit.dk/en >
+    <i class="fa fa-fw fa-external-link-square fa-lg"></i> fadeit</a></li>
+  <li><a href=https://onename.com/justas >
+    <i class="fa fa-fw fa-external-link-square fa-lg"></i> onename.com/justas</a></li>
+  <li><a href=https://keybase.io/reederz >
+    <i class="fa fa-fw fa-external-link-square fa-lg"></i> keybase.io/reederz</a></li>
+</ul>
 
-</body>
+<h4><i class="fa fa-tags fa-fw fa-lg"></i> Tags</h4>
+<p class="tag-cloud">
+<span class="tag-4">
+    <a href="http://reederz.com/tag/crypto.html">
+        <i class="fa fa-tag fa-fw fa-lg"></i>crypto
+    </a>
+</span>
+<span class="tag-4">
+    <a href="http://reederz.com/tag/hello.html">
+        <i class="fa fa-tag fa-fw fa-lg"></i>hello
+    </a>
+</span>
+<span class="tag-4">
+    <a href="http://reederz.com/tag/coursera.html">
+        <i class="fa fa-tag fa-fw fa-lg"></i>coursera
+    </a>
+</span>
+</p>
+
+<h4><i class="fa fa-rss fa-fw fa-lg"></i> Feeds</h4>
+<ul class="list-unstyled">
+    <li><a href="http://reederz.com/feeds/all.atom.xml" 
+		   type="application/atom+xml" rel="alternate">
+		<i class="fa fa-rss-square fa-fw fa-lg"></i> Atom Feed</a></li>
+</ul>
+
+<hr />
+
+        </div><!--/sidebar -->
+      </div><!--/row-->
+    </div><!--/.container /#main-container -->
+
+    <footer id="site-footer">
+ 
+      <address id="site-colophon">
+        <p class="text-center text-muted">
+        Site built using <a href="http://getpelican.com/" target="_blank">Pelican</a>
+        &nbsp;&bull;&nbsp; Theme based on
+        <a href="http://www.voidynullness.net/page/voidy-bootstrap-pelican-theme/"
+           target="_blank">VoidyBootstrap</a> by 
+        <a href="http://www.robertiwancz.com/"
+           target="_blank">RKI</a>  
+        </p>
+      </address><!-- /colophon  -->
+    </footer>
+
+<!-- DISQUS script for displaying comment count -->
+<script type="text/javascript">
+    var disqus_shortname = 'reederz';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+
+    <!-- javascript -->
+   
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+
+  </body>
 </html>
