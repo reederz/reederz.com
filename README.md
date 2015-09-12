@@ -13,7 +13,7 @@ git clone --recursive https://github.com/getpelican/pelican-themes ../pelican-th
 wget -O ../pelican-themes/voidy-bootstrap/static/css/bootstrap.min.css https://bootswatch.com/cosmo/bootstrap.min.css
 git clone --recursive https://github.com/getpelican/pelican-plugins ../pelican-plugins
 
-# Build an run
+# Build and run
 make html
 make devserver
 ```
