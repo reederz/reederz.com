@@ -61,6 +61,8 @@ LINKS = (('fadeit', 'http://fadeit.dk/en',),
          ('onename.com/justas', 'https://onename.com/justas'),
          ('keybase.io/reederz', 'https://keybase.io/reederz'),
          ('Arch Linux', 'https://www.archlinux.org/'),
+         ('CyanogenMod', 'http://www.cyanogenmod.org/'),
+         ('Open Whisper Systems', 'https://whispersystems.org/'),
          ('Tor Browser', 'https://www.torproject.org'),)
 
 
