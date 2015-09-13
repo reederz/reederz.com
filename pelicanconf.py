@@ -59,7 +59,9 @@ AUTHOR_FEED_RSS = None
 
 LINKS = (('fadeit', 'http://fadeit.dk/en',),
          ('onename.com/justas', 'https://onename.com/justas'),
-         ('keybase.io/reederz', 'https://keybase.io/reederz'),)
+         ('keybase.io/reederz', 'https://keybase.io/reederz'),
+         ('Arch Linux', 'https://www.archlinux.org/'),
+         ('Tor Browser', 'https://www.torproject.org'),)
 
 
 # Social widget
