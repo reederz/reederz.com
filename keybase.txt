@@ -1,0 +1,71 @@
+==================================================================
+https://keybase.io/reederz
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of http://reederz.com
+  * I am reederz (https://keybase.io/reederz) on keybase.
+  * I have a public key with fingerprint 5290 E776 21CF 9A07 CA65  1BE9 38E3 4522 E18B 968F
+
+To do so, I am signing this object:
+
+{
+    "body": {
+        "client": {
+            "name": "keybase.io node.js client",
+            "version": "0.8.20"
+        },
+        "key": {
+            "eldest_kid": "0101aad6327fc69683b2ae88c8221e137babc2bf9c09f41cf502b43801957c9a6a230a",
+            "fingerprint": "5290e77621cf9a07ca651be938e34522e18b968f",
+            "host": "keybase.io",
+            "key_id": "38e34522e18b968f",
+            "kid": "0101aad6327fc69683b2ae88c8221e137babc2bf9c09f41cf502b43801957c9a6a230a",
+            "uid": "00c34b79751bf5453b16f8a2502cba19",
+            "username": "reederz"
+        },
+        "service": {
+            "hostname": "reederz.com",
+            "protocol": "http:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "ctime": 1443187671,
+    "expire_in": 157680000,
+    "prev": "ecb576cc514000c5315d12823ff38daa938d8c2ea8aff50abce183cb20dcf8c4",
+    "seqno": 16,
+    "tag": "signature"
+}
+
+which yields the signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v2
+
+owGtUm1oTlEcfx42RjEvmZKXubWozeOec+7LuQt5Wz4shCjaPM4599xnd8927+M+
+18PMyMsHsye0lVZT3qVQhoYWkUKG2gdtrNnWCJNZEj46l1HKR+fT6X9+v9//9//9
+z9FxI0NZYdxfJPXVHTsSbntPQxsyizuqJeqaVVJhtcQqbO74wc0hlVwqlOK8ipIk
+j9huruOaPFKezB3GFEgp7iVt1xEoOYIjUJZqCgJ8wOYVJk/60bhtBq9ABoSYGoK6
+xTRDw4hCwjFmGELAAdIpoQxSy2CyYSmAWaoMqYKwDAxVZwbRCEQyEQ0t24lxL+HZ
+gUVJhYbMdV2DgmEQWWdEUwHlBsIcKSqEHGAqmlmCWOYm/b+GkX46jf609w/8f/a9
+7ZeczJBCdUMXLi1VUREFmoUJFCxGCTACYJJ7w8F7nJvc2xlkKoopm/Eg12CQvwER
+5lYKZsJzfZe5FeKhzPcThQHPr0oEwO2cRoclotR2TBHin+UdE9sDAsp8OxAFioIA
+1jUdFEh8R8L2eNQOEKquYVmcoA9PCU3OqKgxpgJFlJmKgGoCiCGyLIRNQsQSTMwg
+J5hYIhaRk0gXMQplk1mYKVIw1VbHFdqaMEpiQjNpxxzib/O4VFMbnp4RCmeFRmWO
+CP5naOyYCb8/7afurFDLnM7xLxrOFbROOtiRSJ8y3my8moGyu5qtx8+W5WUXXVzS
+WOsO3Ps4MLJXa+8r/RZbEPs6r3Vx+8W1uxfPijut8a6mnJNrBie/7utp+9a7Ino2
+c7A3e0l6Yqqu9s7mDw9u7ZqRceNZYePn81vW3zy9d9UIpX5/Ot3c9HD5oroDPXJx
+/O7U5w2XbtYdbbxf5M7tnB16U5kztKXGOR5bmeqZ93JWZXWFpcYGOvYs08K5j8LJ
+ttq9t2fKYKj8yui3Cw+dyPuafxmVjCl15e5rqHo1KHlCjlSts6eVzs9Z0R8+9+V7
+/f3m63bJ601TZqeVt69Wtux7hw4vLb7Q+7jfPkSf5p95mvUD
+=io7+
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/reederz
+
+==================================================================
