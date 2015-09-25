@@ -18,6 +18,7 @@ PLUGINS = ['sitemap', 'tag_cloud']
 
 STATIC_PATHS = ['images', 'extra', 'docs']
 EXTRA_PATH_METADATA = {'extra/CNAME': {'path': 'CNAME'}}
+EXTRA_PATH_METADATA = {'extra/keybase.txt': {'path': 'keybase.txt'}}
 
 
 # voidy-bootstrap specific
