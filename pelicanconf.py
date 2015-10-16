@@ -58,13 +58,15 @@ TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
-LINKS = (('fadeit', 'http://fadeit.dk/en',),
-         ('onename.com/justas', 'https://onename.com/justas'),
-         ('keybase.io/reederz', 'https://keybase.io/reederz'),
-         ('Arch Linux', 'https://www.archlinux.org/'),
+LINKS = (('keybase.io/reederz', 'https://keybase.io/reederz'),
+         ('freedom.press', 'https://freedom.press/'),
          ('CyanogenMod', 'http://www.cyanogenmod.org/'),
+         ('Tor Browser', 'https://www.torproject.org'),
          ('Open Whisper Systems', 'https://whispersystems.org/'),
-         ('Tor Browser', 'https://www.torproject.org'),)
+         ('Project Danube', 'http://projectdanube.org/'),
+         ('Arch Linux', 'https://www.archlinux.org/'),
+         ('BlockchainHub', 'http://blockchainhub.net/'),
+         ('fadeit', 'http://fadeit.dk/en',),)
 
 
 # Social widget
