@@ -1,4 +1,4 @@
 About
 #####
 
-My name's Justas. I'm a Web Developer / Co-founder at `fadeit <http://fadeit.dk/en>`_. This is my personal site where I'll sometimes blog about stuff that interests me (most likely tech).
+My name is Justas. I'm a programmer interested in Web, Linux, Privacy and Decentralization. This is my personal site where I'll sometimes write about that (and perhaps some other stuff).

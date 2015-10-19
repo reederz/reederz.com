@@ -58,8 +58,7 @@ TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
-LINKS = (('keybase.io/reederz', 'https://keybase.io/reederz'),
-         ('freedom.press', 'https://freedom.press/'),
+LINKS = (('freedom.press', 'https://freedom.press/'),
          ('CyanogenMod', 'http://www.cyanogenmod.org/'),
          ('Tor Browser', 'https://www.torproject.org'),
          ('Open Whisper Systems', 'https://whispersystems.org/'),
@@ -70,12 +69,12 @@ LINKS = (('keybase.io/reederz', 'https://keybase.io/reederz'),
 
 
 # Social widget
-SOCIAL = (('github', 'https://github.com/reederz',
+SOCIAL = (('keybase.io/reederz', 'https://keybase.io/reederz',
+           'fa fa-lock fa-fw fa-lg'),
+          ('github', 'https://github.com/reederz',
            'fa fa-github-square fa-fw fa-lg'),
           ('twitter', 'https://twitter.com/reederz',
-           'fa fa-twitter-square fa-fw fa-lg'),
-          ('reddit', 'https://reddit.com/u/reederz',
-           'fa fa-reddit-square fa-fw fa-lg'),)
+           'fa fa-twitter-square fa-fw fa-lg'),)
 
 
 DEFAULT_PAGINATION = 10
