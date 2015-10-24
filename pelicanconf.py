@@ -65,6 +65,7 @@ LINKS = (('freedom.press', 'https://freedom.press/'),
          ('Project Danube', 'http://projectdanube.org/'),
          ('Arch Linux', 'https://www.archlinux.org/'),
          ('BlockchainHub', 'http://blockchainhub.net/'),
+         ('Tutanota email', 'http://tutanota.com/'),
          ('fadeit', 'http://fadeit.dk/en',),)
 
 
