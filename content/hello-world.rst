@@ -14,8 +14,6 @@ I'm particularly bored today. Not that I don't have anything to do, it's just th
 
 A bit about me: I'm a 24 year old dude who's interested in software security, automation and semantic web. I spend most of my time hanging out at `fadeit <http://fadeit.dk/en>`_, reading `weird Sci-Fi books <https://www.goodreads.com/book/show/68497.The_Scar>`_, watching old movies and etc. Who knows, perhaps blogging will become my thing too (don't expect any kind of regularity). 
 
-Finally, I'm well aware that The Internet `does not forget <https://archive.org/>`_ so I'll try to stay as `politically correct <https://en.wikipedia.org/wiki/PCU_%28film%29>`_ as possible.
-
 Cheers,
 
 Justas
