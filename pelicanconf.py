@@ -63,6 +63,7 @@ LINKS = (('freedom.press', 'https://freedom.press/'),
          ('Tor Browser', 'https://www.torproject.org'),
          ('Open Whisper Systems', 'https://whispersystems.org/'),
          ('Project Danube', 'http://projectdanube.org/'),
+         ('Play. Digital Signage', 'https://playsignage.com/'),
          ('Arch Linux', 'https://www.archlinux.org/'),
          ('BlockchainHub', 'http://blockchainhub.net/'),
          ('Tutanota email', 'http://tutanota.com/'),
@@ -75,7 +76,9 @@ SOCIAL = (('keybase.io/reederz', 'https://keybase.io/reederz',
           ('github', 'https://github.com/reederz',
            'fa fa-github-square fa-fw fa-lg'),
           ('twitter', 'https://twitter.com/reederz',
-           'fa fa-twitter-square fa-fw fa-lg'),)
+           'fa fa-twitter-square fa-fw fa-lg'),
+          ('medium', 'https://medium.com/@reederz',
+              'fa fa-medium fa-fw fa-lg'),)
 
 
 DEFAULT_PAGINATION = 10
