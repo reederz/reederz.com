@@ -67,7 +67,7 @@ LINKS = (('freedom.press', 'https://freedom.press/'),
          ('Arch Linux', 'https://www.archlinux.org/'),
          ('BlockchainHub', 'http://blockchainhub.net/'),
          ('Tutanota email', 'http://tutanota.com/'),
-         ('My Toptal profile', 'https://www.toptal.com/resume/justas-azna'),
+         ('My Toptal profile', 'https://www.toptal.com/resume/justas-azna#select-just-spectacular-programmers-now'),
          ('My posts on fadeit blog', 'https://fadeit.dk/blog/authors/justas/',),)
 
 
