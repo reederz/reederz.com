@@ -5,4 +5,4 @@ My name is Justas. I'm a programmer interested in Web, Linux, Privacy and Decent
 
 **Hire Me**
 
-If you're looking for a freelance web developer or sysadmin, you can contact me through my company - `fadeit <http://fadeit.dk/en>`_.
+If you're looking for a freelance web developer, you can hire me through `my company <http://fadeit.dk/en>`_ or `Toptal <https://www.toptal.com/resume/justas-azna>`_.
