@@ -24,4 +24,4 @@ The stages 2-4 were the most challenging and I've initially failed the 3rd stage
 
 Once I got accepted and setup `my profile <https://www.toptal.com/resume/justas-azna#select-just-spectacular-programmers-now>`_ I could apply for jobs (yeah, you still have to do that). But since I was busy at the moment, I put it on hold. Even so, a few weeks later one of the recruiters found me an interview and after talking to the client I got hired as a Senior Software Developer/Architect.
 
-All in all, my short experience with Toptal is very good and I'm happy to have joined their network. So if you are looking for challening and exciting software projects or are in need of help with one, go ahead and `check them out <https://www.toptal.com/#select-just-spectacular-programmers-now>`_!
+All in all, my short experience with Toptal is very good and I'm happy to have joined their network. Go ahead and check them out, if you are `looking for challening and exciting software projects <https://www.toptal.com/talent/apply#select-just-spectacular-programmers-now>`_ or `are in need of help with one <https://www.toptal.com/companies/apply#select-just-spectacular-programmers-now>`_.
