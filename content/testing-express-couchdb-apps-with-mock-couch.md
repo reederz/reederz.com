@@ -2,7 +2,7 @@ Title:  Testing Express.js + CouchDB Applications with mock-couch
 Summary: There's a way to test Express.js + CouchDB web apps with confidence of end-to-end tests and execution speed of unit-tests. Meet mock-couch- a node.js module which pretends to be a CouchDB server for testing purposes.
 Category: archive
 date:   2018-09-23 10:00:00+02:00
-Tags: couchdb, mock-couch, express, javascript, nodejs, javascript, back-end
+Tags: couchdb, mock-couch, express, javascript, nodejs
 
 
 ## Prerequisites
