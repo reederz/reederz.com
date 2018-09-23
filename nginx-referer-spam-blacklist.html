@@ -108,7 +108,7 @@
 <p>Recently, we submitted fadeit.dk to <a href="http://www.awwwards.com/best-websites/fadeit-1/"><span class="caps">AWWWARDS</span></a> - the awards for design, creativity and innovation on the Internet. It gave us a nice little boost of website visitors. However, not all of that attention was&nbsp;positive&#8230;</p>
 <h2>Referer Spam&nbsp;Bots</h2>
 <p>While the majority of our traffic came from genuine sources, we started noticing a pattern in our referral&nbsp;traffic.</p>
-<p>![Google Analytics Dashboard - Acquisition /&nbsp;Referrals][ga-dashboard]</p>
+<p><img alt="Google Analytics Dashboard - Acquisition / Referrals" src="http://reederz.com/images/nginx-referer-spam-blacklist/ga_dashboard.png"></p>
 <p>What&#8217;s up with <code>social-buttons.com</code>? We didn&#8217;t sign up for that&#8230; Apparently, this is something called <a href="http://en.wikipedia.org/wiki/Referer_spam">Referer Spam</a>*:</p>
 <blockquote>
 <p>Referrer spam (also known as log spam or referrer bombing) is a kind of spamdexing (spamming aimed at search engines). The technique involves making repeated web site requests using a fake referer <span class="caps">URL</span> to the site the spammer wishes to advertise. Sites that publish their access logs, including referer statistics, will then inadvertently link back to the spammer&#8217;s site. These links will be indexed by search engines as they crawl the access logs. -&nbsp;Wikipedia</p>
@@ -200,7 +200,6 @@ curl: <span class="o">(</span><span class="m">52</span><span class="o">)</span> 
 <li><a href="https://github.com/oohnoitz/nginx-blacklist">Blacklist by oohnoitz</a> which blocks bad bots, pentest tools, surveillance bots, etc. It&#8217;s an excellent addition to the referer spam blacklist described in this&nbsp;post.</li>
 <li><a href="http://perishablepress.com/4g-ultimate-referrer-blacklist/">Ultimate referer&nbsp;blacklist</a></li>
 </ul>
-<p>[ga-dashboard]: {{ site.baseurl&nbsp;}}/assets/nginx-referer-spam-blacklist/ga_dashboard.png</p>
   </div>
   
 <div class="article-tag-list">
