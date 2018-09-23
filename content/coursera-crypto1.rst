@@ -6,7 +6,6 @@ Coursera - Cryptography I
 :category: blog
 :tags: coursera, crypto
 :slug: coursera-crypto1
-:authors: Justas Azna
 :summary: I have recently finished Cryptography I - an online course by Prof. Dan Boneh on Coursera.org. Here's what I have learnt.
 
 I have recently finished `Cryptography I <https://www.coursera.org/course/crypto>`_ - an introductory online course  on Cryptography by Prof. Dan Boneh of Stanford and today I received my fancy `Statement of Accomplishment </docs/coursera/crypto1.pdf>`_. It was an interesting and challenging experience. 

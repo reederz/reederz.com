@@ -6,7 +6,6 @@ I got hired by Toptal
 :category: blog
 :tags: freelancing, toptal
 :slug: got-hired-by-toptal
-:authors: Justas Azna
 :summary: I became a freelance software engineer at toptal.com
 
 A few weeks ago, I passed my last screening stage for `toptal.com <https://www.toptal.com/#select-just-spectacular-programmers-now>`_ software freelancing platform. Unlike other similar platforms, such as `upwork <https://upwork.com>`_ and `freelancer.com <https://freelancer.com>`_, this one is pretty hard to get in. They hire top 3% of freelance talent and they have a tough interviewing process to ensure that.
