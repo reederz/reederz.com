@@ -26,6 +26,7 @@ EXTRA_PATH_METADATA = {'extra/CNAME': {'path': 'CNAME'},
 SITETAG = "homepage"
 STYLESHEET_FILES = ("pygment.css", "voidybootstrap.css",)
 CUSTOM_ARTICLE_FOOTERS = ("taglist.html",)
+CUSTOM_SIDEBAR_MIDDLES = ("sb_links.html", "sb_taglist.html")
 # Using cosmo theme from bootswatch
 BOOTSTRAP_STYLESHEET = 'bootstrap.min.css'
 # CUSTOM_SCRIPTS_ARTICLE = "sharing_scripts.html"
@@ -63,12 +64,9 @@ LINKS = (('freedom.press', 'https://freedom.press/'),
          ('Tor Browser', 'https://www.torproject.org'),
          ('Open Whisper Systems', 'https://whispersystems.org/'),
          ('Project Danube', 'http://projectdanube.org/'),
-         ('Play. Digital Signage', 'https://playsignage.com/'),
+         ('Play Digital Signage', 'https://playsignage.com/'),
          ('Arch Linux', 'https://www.archlinux.org/'),
-         ('BlockchainHub', 'http://blockchainhub.net/'),
-         ('Tutanota email', 'http://tutanota.com/'),
-         ('My Toptal profile', 'https://www.toptal.com/resume/justas-azna#select-just-spectacular-programmers-now'),
-         ('My posts on fadeit blog', 'https://fadeit.dk/blog/authors/justas/',),)
+         ('My Toptal profile', 'https://www.toptal.com/resume/justas-azna#select-just-spectacular-programmers-now'),)
 
 
 # Social widget
