@@ -8,7 +8,7 @@
     <meta name="author" content="Justas Ažna" />
     <meta name="generator" content="Pelican (VoidyBootstrap theme)" />
 
-    <title>I got hired by Toptal - reederz</title>
+    <title>Blacklist Referer Spam Bots with NGINX - reederz</title>
 
    
  
@@ -87,41 +87,127 @@
 <article itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
   <header class="article-header">
 <abbr class="article-header-date">
-  Tue 13 September 2016
+  Sun 23 September 2018
 </abbr> <h1>
-  <a href="http://reederz.com/got-hired-by-toptal.html" rel="bookmark"
-     title="Permalink to I got hired by Toptal">
-    I got hired by&nbsp;Toptal
+  <a href="http://reederz.com/nginx-referer-spam-blacklist.html" rel="bookmark"
+     title="Permalink to Blacklist Referer Spam Bots with NGINX">
+    Blacklist Referer Spam Bots with <span class="caps">NGINX</span>
   </a>
 </h1><div class="article-header-info">
   <p>
       Posted by <a href="http://reederz.com/author/justas-azna.html">Justas Ažna</a>
     in 
-    <a href="http://reederz.com/category/blog.html">
-      blog</a>
+    <a href="http://reederz.com/category/archive.html">
+      archive</a>
     &nbsp;&nbsp;
   </p>
 </div> <!-- /.article-header-info -->  </header>
   <div class="content-body" itemprop="text articleBody">
-	<p>A few weeks ago, I passed my last screening stage for <a class="reference external" href="https://www.toptal.com/#select-just-spectacular-programmers-now">toptal.com</a> software freelancing platform. Unlike other similar platforms, such as <a class="reference external" href="https://upwork.com">upwork</a> and <a class="reference external" href="https://freelancer.com">freelancer.com</a>, this one is pretty hard to get in. They hire top 3% of freelance talent and they have a tough interviewing process to ensure&nbsp;that.</p>
-<p>First of all, why would you want to be a part of toptal? I&#8217;ve tried a couple other freelancing platforms and I didn&#8217;t really like them that much. Since there is little to no skill assesment of the freelancers and a huge competition, you have to invest a lot of effort into justifying your skills to the clients every single time. Toptal is different. Because of the hard screening process, merely by passing it you have proven that you are good at what you do (and the clients know&nbsp;that).</p>
-<p>The screening process itself has <a class="reference external" href="https://www.toptal.com/top-3-percent#select-just-spectacular-programmers-now">4 stages</a>:</p>
-<ol class="arabic simple">
-<li>Skype interview with an <span class="caps">HR</span> person to assess your English skills and&nbsp;personality.</li>
-<li>Timed algorithm test: 3 coding exercises in 90 minutes on <a class="reference external" href="https://codility.com">codility</a> platform to assess your problem solving and algorithm&nbsp;skills.</li>
-<li>Live technical screening with a Sr. Engineer where you are asked technical questions and have to do live&nbsp;programming.</li>
-<li>A test project to prove that you are capable of working on a real life project. The project takes around 2 weeks to complete after which you have to present it to &#8220;the client&#8221; (one of toptal&nbsp;engineers).</li>
-</ol>
-<p>The stages 2-4 were the most challenging and I&#8217;ve initially failed the 3rd stage because I ran out of time when doing the live coding. Fortunately, they let you retry it after 1 month and I was luckier with my second&nbsp;attempt.</p>
-<p>Once I got accepted and setup <a class="reference external" href="https://www.toptal.com/resume/justas-azna#select-just-spectacular-programmers-now">my profile</a> I could apply for jobs (yeah, you still have to do that). But since I was busy at the moment, I put it on hold. Even so, a few weeks later one of the recruiters found me an interview and after talking to the client I got hired as a Senior Software&nbsp;Developer/Architect.</p>
-<p>All in all, my short experience with Toptal is very good and I&#8217;m happy to have joined their network. Go ahead and check them out, if you are <a class="reference external" href="https://www.toptal.com/talent/apply#select-just-spectacular-programmers-now">looking for challening and exciting software projects</a> or <a class="reference external" href="https://www.toptal.com/companies/apply#select-just-spectacular-programmers-now">are in need of help with one</a>.</p>
+	<p><strong>Originally posted on 2015-04-22 at fadeit.dk/blog which is no longer&nbsp;available</strong></p>
+<h2>Some&nbsp;Background</h2>
+<p>Recently, we submitted fadeit.dk to <a href="http://www.awwwards.com/best-websites/fadeit-1/"><span class="caps">AWWWARDS</span></a> - the awards for design, creativity and innovation on the Internet. It gave us a nice little boost of website visitors. However, not all of that attention was&nbsp;positive&#8230;</p>
+<h2>Referer Spam&nbsp;Bots</h2>
+<p>While the majority of our traffic came from genuine sources, we started noticing a pattern in our referral&nbsp;traffic.</p>
+<p>![Google Analytics Dashboard - Acquisition /&nbsp;Referrals][ga-dashboard]</p>
+<p>What&#8217;s up with <code>social-buttons.com</code>? We didn&#8217;t sign up for that&#8230; Apparently, this is something called <a href="http://en.wikipedia.org/wiki/Referer_spam">Referer Spam</a>*:</p>
+<blockquote>
+<p>Referrer spam (also known as log spam or referrer bombing) is a kind of spamdexing (spamming aimed at search engines). The technique involves making repeated web site requests using a fake referer <span class="caps">URL</span> to the site the spammer wishes to advertise. Sites that publish their access logs, including referer statistics, will then inadvertently link back to the spammer&#8217;s site. These links will be indexed by search engines as they crawl the access logs. -&nbsp;Wikipedia</p>
+</blockquote>
+<p>This is not cool, Mr. social-buttons.com. P**s&nbsp;off!</p>
+<p><em>* No, I didn&#8217;t mispell. The mispelling actually made it into the <a href="http://tools.ietf.org/html/rfc1945"><span class="caps">HTTP</span>/1.0 standard</a> and now it&#8217;s there forever&nbsp;:)</em></p>
+<h2><span class="caps">NGINX</span>&nbsp;Solution</h2>
+<p>Since we&#8217;re using <span class="caps">NGINX</span> to serve our site, the solution is going to be described for <span class="caps">NGINX</span>. Apache people can take a look at this excellent <a href="https://www.addedbytes.com/blog/block-referrer-spam/">article</a>.</p>
+<p>The official <span class="caps">NGINX</span> wiki does mention <a href="http://wiki.nginx.org/Referrer_Spam_Blocking">a solution</a> to this problem. Basically, you just use <a href="http://nginx.org/en/docs/http/ngx_http_referer_module.html">ngx_http_referer_module</a>* and add something like this to your location or server&nbsp;block:</p>
+<div class="highlight"><pre><span></span>valid_referers none blocked server_names *.social-buttons.com social-buttons.com badreferer2.com<span class="p">;</span>
 
+<span class="k">if</span> <span class="o">(</span><span class="nv">$invalid_referer</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">return</span>   <span class="m">444</span><span class="p">;</span>
+<span class="o">}</span>
+</pre></div>
+
+
+<p>This works, but what if we want to maintain a larger blacklist of referers? Our <code>valid_referers</code> directive would get crazy long. If that&#8217;s fine with you, you can stop reading here. It sure isn&#8217;t fine with me&nbsp;:).</p>
+<p>In order to make our blacklist more maintainable, we can use <a href="http://nginx.org/en/docs/http/ngx_http_map_module.html">ngx_http_map_module</a>. Let&#8217;s save <code>/etc/nginx/conf.d/blacklist.conf</code> file with the following&nbsp;content:</p>
+<div class="highlight"><pre><span></span><span class="c1"># /etc/nginx/conf.d/blacklist.conf</span>
+
+map <span class="nv">$http_referer</span> <span class="nv">$bad_referer</span> <span class="o">{</span>
+    hostnames<span class="p">;</span>
+
+    default                           <span class="m">0</span><span class="p">;</span>
+
+    <span class="c1"># Put regexes for undesired referers here</span>
+    <span class="s2">&quot;~social-buttons.com&quot;</span>             <span class="m">1</span><span class="p">;</span>
+    <span class="s2">&quot;~semalt.com&quot;</span>                     <span class="m">1</span><span class="p">;</span>
+    <span class="s2">&quot;~kambasoft.com&quot;</span>                  <span class="m">1</span><span class="p">;</span>
+    <span class="s2">&quot;~savetubevideo.com&quot;</span>              <span class="m">1</span><span class="p">;</span>
+    <span class="s2">&quot;~descargar-musica-gratis.net&quot;</span>    <span class="m">1</span><span class="p">;</span>
+    <span class="s2">&quot;~7makemoneyonline.com&quot;</span>           <span class="m">1</span><span class="p">;</span>
+    <span class="s2">&quot;~baixar-musicas-gratis.com&quot;</span>      <span class="m">1</span><span class="p">;</span>
+    <span class="s2">&quot;~iloveitaly.com&quot;</span>                 <span class="m">1</span><span class="p">;</span>
+    <span class="s2">&quot;~ilovevitaly.ru&quot;</span>                 <span class="m">1</span><span class="p">;</span>
+    <span class="s2">&quot;~fbdownloader.com&quot;</span>               <span class="m">1</span><span class="p">;</span>
+    <span class="s2">&quot;~econom.co&quot;</span>                      <span class="m">1</span><span class="p">;</span>
+    <span class="s2">&quot;~buttons-for-website.com&quot;</span>        <span class="m">1</span><span class="p">;</span>
+    <span class="s2">&quot;~buttons-for-your-website.com&quot;</span>   <span class="m">1</span><span class="p">;</span>
+    <span class="s2">&quot;~srecorder.co&quot;</span>                   <span class="m">1</span><span class="p">;</span>
+    <span class="s2">&quot;~darodar.com&quot;</span>                    <span class="m">1</span><span class="p">;</span>
+    <span class="s2">&quot;~priceg.com&quot;</span>                     <span class="m">1</span><span class="p">;</span>
+    <span class="s2">&quot;~blackhatworth.com&quot;</span>              <span class="m">1</span><span class="p">;</span>
+    <span class="s2">&quot;~adviceforum.info&quot;</span>               <span class="m">1</span><span class="p">;</span>
+    <span class="s2">&quot;~hulfingtonpost.com&quot;</span>             <span class="m">1</span><span class="p">;</span>
+    <span class="s2">&quot;~best-seo-solution.com&quot;</span>          <span class="m">1</span><span class="p">;</span>
+    <span class="s2">&quot;~googlsucks.com&quot;</span>                 <span class="m">1</span><span class="p">;</span>
+    <span class="s2">&quot;~theguardlan.com&quot;</span>                <span class="m">1</span><span class="p">;</span>
+    <span class="s2">&quot;~i-x.wiki&quot;</span>                       <span class="m">1</span><span class="p">;</span>
+    <span class="s2">&quot;~buy-cheap-online.info&quot;</span>          <span class="m">1</span><span class="p">;</span>
+    <span class="s2">&quot;~Get-Free-Traffic-Now.com&quot;</span>       <span class="m">1</span><span class="p">;</span>
+<span class="o">}</span>
+</pre></div>
+
+
+<p>Now add conditions to the sites, for which you want to block referer spam&nbsp;bots:</p>
+<div class="highlight"><pre><span></span><span class="c1"># /etc/nginx/sites-enabled/mysite.conf</span>
+
+server <span class="o">{</span>
+  <span class="c1"># ...</span>
+
+  <span class="k">if</span> <span class="o">(</span><span class="nv">$bad_referer</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="m">444</span><span class="p">;</span>
+  <span class="o">}</span>
+
+  <span class="c1"># ...</span>
+<span class="o">}</span>
+</pre></div>
+
+
+<p><span class="caps">OK</span>, now let&#8217;s test if this thing&nbsp;works:</p>
+<div class="highlight"><pre><span></span><span class="c1"># with subdomain</span>
+ $ curl --referer http://www.social-buttons.com https://fadeit.dk/en
+curl: <span class="o">(</span><span class="m">52</span><span class="o">)</span> Empty reply from server
+
+<span class="c1"># without subdomain</span>
+ $ curl --referer http://social-buttons.com https://fadeit.dk/en
+curl: <span class="o">(</span><span class="m">52</span><span class="o">)</span> Empty reply from server
+</pre></div>
+
+
+<p>Sweet! It&nbsp;worked.</p>
+<p><em>* Both <a href="http://nginx.org/en/docs/http/ngx_http_referer_module.html">ngx_http_referer_module</a> and <a href="http://nginx.org/en/docs/http/ngx_http_map_module.html">ngx_http_map_module</a> are included in the standard <span class="caps">NGINX</span> distribution and you don&#8217;t need to recompile your&nbsp;server.</em></p>
+<h2>That&#8217;s&nbsp;it!</h2>
+<p>What&#8217;s your experience with Referer Spam? Don&#8217;t hesitate to use the comment section&nbsp;:)</p>
+<h2>Additional&nbsp;Resources</h2>
+<ul>
+<li><a href="https://github.com/oohnoitz/nginx-blacklist">Blacklist by oohnoitz</a> which blocks bad bots, pentest tools, surveillance bots, etc. It&#8217;s an excellent addition to the referer spam blacklist described in this&nbsp;post.</li>
+<li><a href="http://perishablepress.com/4g-ultimate-referrer-blacklist/">Ultimate referer&nbsp;blacklist</a></li>
+</ul>
+<p>[ga-dashboard]: {{ site.baseurl&nbsp;}}/assets/nginx-referer-spam-blacklist/ga_dashboard.png</p>
   </div>
   
 <div class="article-tag-list">
 <span class="label label-default">Tags</span>
-	<a href="http://reederz.com/tag/freelancing.html"><i class="fa fa-tag"></i>freelancing</a>&nbsp;
-	<a href="http://reederz.com/tag/toptal.html"><i class="fa fa-tag"></i>toptal</a>&nbsp;
+	<a href="http://reederz.com/tag/nginx.html"><i class="fa fa-tag"></i>nginx</a>&nbsp;
+	<a href="http://reederz.com/tag/spam.html"><i class="fa fa-tag"></i>spam</a>&nbsp;
+	<a href="http://reederz.com/tag/google-analytics.html"><i class="fa fa-tag"></i>google-analytics</a>&nbsp;
 </div>
   <div class="comments">
 	<h2>Comments</h2>

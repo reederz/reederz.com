@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="Justas Ažna" />
+    <meta name="generator" content="Pelican (VoidyBootstrap theme)" />
+
+    <title>Testing Express.js + CouchDB Applications with mock-couch - reederz</title>
+
+   
+ 
+        <link rel="stylesheet" href="http://reederz.com/theme/css/bootstrap.min.css" />
+      <link rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+            integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+            crossorigin="anonymous">
+
+
+      <link rel="stylesheet" href="http://reederz.com/theme/css/pygment.css" />
+      <link rel="stylesheet" href="http://reederz.com/theme/css/voidybootstrap.css" />
+
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js" integrity="sha384-FFgGfda92tXC8nCNOxrCQ3R8x1TNkMFqDZVQdDaaJiiVbjkPBXIJBx0o7ETjy8Bh" crossorigin="anonymous"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js" integrity="sha384-ZoaMbDF+4LeFxg6WdScQ9nnR1QC2MIRxA1O9KWEXQwns1G8UNyIEZIQidzb0T1fo" crossorigin="anonymous"></script>
+    <![endif]-->
+
+    <link rel="shortcut icon" href="http://reederz.com/favicon.ico" />
+        <link href="http://reederz.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="reederz Atom Feed" />
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56922833-2', '');
+  ga('send', 'pageview');
+
+</script>
+  </head>
+
+  <body>
+   
+    <nav class="navbar navbar-default">
+      <div class="container">
+	   <div class="navbar-header">
+		<button type="button" class="navbar-toggle" 
+				data-toggle="collapse" data-target="#main-navbar-collapse">
+		  <span class="sr-only">Toggle navigation</span>
+		  <span class="icon-bar"></span>
+		  <span class="icon-bar"></span>
+		  <span class="icon-bar"></span>
+		</button>
+		<a class="navbar-brand" href="http://reederz.com/" rel="home">
+          <i class="fa fa-home fa-fw fa-lg"> </i> </a>
+       </div>
+
+      <div class="collapse navbar-collapse" id="main-navbar-collapse">
+        <ul class="nav navbar-nav">
+              <li>
+                <a href="http://reederz.com/pages/about.html">About</a>
+              </li>
+            <li class="divider"></li>
+            <li class="">
+              <a href="http://reederz.com/archives.html">Archives</a>
+            </li>
+          <li class="divider"></li>
+            <li><a href="http://reederz.com/feeds/all.atom.xml" 
+                   type="application/atom+xml" rel="alternate">
+                <i class="fa fa-rss fa-fw fa-lg"></i> </a></li>
+        </ul> <!-- /nav -->
+      </div> <!-- /navbar-collapse -->
+	  </div> <!-- /container -->
+    </nav> <!-- /navbar -->
+
+	<div class="jumbotron" id="overview">
+	  <div class="container">
+		<h1><a href="http://reederz.com/">reederz</a></h1>
+	  </div>
+	</div>
+
+    <div class="container" id="main-container">
+      <div class="row">
+        <div class="col-md-9" id="content">
+<article itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+  <header class="article-header">
+<abbr class="article-header-date">
+  Sun 23 September 2018
+</abbr> <h1>
+  <a href="http://reederz.com/testing-expressjs-couchdb-applications-with-mock-couch.html" rel="bookmark"
+     title="Permalink to Testing Express.js + CouchDB Applications with mock-couch">
+    Testing Express.js + CouchDB Applications with&nbsp;mock-couch
+  </a>
+</h1><div class="article-header-info">
+  <p>
+      Posted by <a href="http://reederz.com/author/justas-azna.html">Justas Ažna</a>
+    in 
+    <a href="http://reederz.com/category/archive.html">
+      archive</a>
+    &nbsp;&nbsp;
+  </p>
+</div> <!-- /.article-header-info -->  </header>
+  <div class="content-body" itemprop="text articleBody">
+	<h2>Prerequisites</h2>
+<p><strong>Originally posted on 2015-07-05 at fadeit.dk/blog which is no longer&nbsp;available</strong></p>
+<p>The code in this post is based upon <a href="http://coffeescript.org/">CoffeeScript</a>, <a href="http://mochajs.org/">Mocha</a> and <a href="http://gulpjs.com/">Gulp</a> but it should be easily adaptable to other stacks (e.g. <a href="https://www.javascript.com/">JavaScript</a>, <a href="https://jasmine.github.io/">Jasmine</a> and <a href="http://gruntjs.com/">Grunt</a>).</p>
+<h2>Intro</h2>
+<p>Recently, I worked on a <a href="http://expressjs.com/">Express.js</a> based RESTful <span class="caps">API</span> with <a href="https://couchdb.apache.org/">CouchDB</a> storage. For various reasons, I mostly had end-to-end tests (testing <span class="caps">HTTP</span> endpoints) and very few unit tests. In the tests, I would rebuild the database before every <code>describe</code> block. This worked quite well but at one point I noticed that my feedback loops were beginning to get tediously slow (~30 seconds to run the full test suite). Thankfully, I discovered <a href="https://github.com/chris-l/mock-couch">mock-couch</a>: in-memory storage with CouchDB <span class="caps">API</span>. The switch was rather easy and, as a result, my test suite would finish in less than 10 seconds (even when reseting test data before each&nbsp;test).</p>
+<h2>Setup</h2>
+<p>Our sample <span class="caps">API</span> will expose functionality to access a database of sofa&#8217;s. Let&#8217;s set it&nbsp;up.</p>
+<p>Structure and&nbsp;dependencies</p>
+<div class="highlight"><pre><span></span>mkdir -p sofa-api/specs
+<span class="nb">cd</span> sofa-api
+npm install mock-couch coffee-script gulp gulp-mocha should supertest express nano q
+</pre></div>
+
+
+<p>gulpfile.coffee</p>
+<div class="highlight"><pre><span></span><span class="nx">require</span> <span class="s">&#39;coffee-script/register&#39;</span>
+
+<span class="nv">gulp    = </span><span class="nx">require</span> <span class="s">&#39;gulp&#39;</span>
+<span class="nv">mocha   = </span><span class="nx">require</span> <span class="s">&#39;gulp-mocha&#39;</span>
+
+<span class="nv">sources =</span>
+  <span class="nv">tests: </span><span class="s">&#39;./specs/**/*.spec.coffee&#39;</span>
+
+<span class="c1"># Task to run tests with mock-couch backend</span>
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span> <span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="nf">-&gt;</span>
+  <span class="nv">process.env.NODE_ENV = </span><span class="s">&#39;test&#39;</span>
+  <span class="nv">process.env.PORT = </span><span class="mi">3010</span>
+  <span class="nv">process.env.COUCH_PORT = </span><span class="mi">5987</span>
+  <span class="nv">process.env.DATABASE = </span><span class="s">&#39;sofas_test&#39;</span>
+  <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">sources</span><span class="p">.</span><span class="nx">tests</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">mocha</span><span class="p">())</span>
+
+<span class="c1"># Task to run integration tests (real CouchDB backend)</span>
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span> <span class="s">&#39;test-int&#39;</span><span class="p">,</span> <span class="nf">-&gt;</span>
+  <span class="nv">process.env.NODE_ENV = </span><span class="s">&#39;test-int&#39;</span>
+  <span class="nv">process.env.PORT = </span><span class="mi">3010</span>
+  <span class="nv">process.env.COUCH_PORT = </span><span class="mi">5984</span>
+  <span class="nv">process.env.DATABASE = </span><span class="s">&#39;sofas_test&#39;</span>
+  <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">sources</span><span class="p">.</span><span class="nx">tests</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">mocha</span><span class="p">())</span>
+
+<span class="c1"># Task to run our server</span>
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span> <span class="s">&#39;default&#39;</span><span class="p">,</span> <span class="nf">-&gt;</span>
+  <span class="nv">process.env.NODE_ENV = </span><span class="s">&#39;development&#39;</span>
+  <span class="nv">process.env.PORT = </span><span class="mi">3000</span>
+  <span class="nv">process.env.COUCH_PORT = </span><span class="mi">5984</span>
+  <span class="nv">process.env.DATABASE = </span><span class="s">&#39;sofas&#39;</span>
+
+  <span class="nv">server = </span><span class="nx">require</span> <span class="s">&#39;./server&#39;</span>
+  <span class="nx">server</span><span class="p">.</span><span class="nx">listen</span><span class="p">()</span>
+</pre></div>
+
+
+<p>server.coffee</p>
+<div class="highlight"><pre><span></span><span class="nv">express    = </span><span class="nx">require</span> <span class="s">&#39;express&#39;</span>
+
+<span class="nv">app = </span><span class="nx">express</span><span class="p">()</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">get</span> <span class="s">&#39;/sofas&#39;</span><span class="p">,</span> <span class="nf">(req, res) -&gt;</span>
+  <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&#39;not implemented&#39;</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">get</span> <span class="s">&#39;/sofas/:sofa&#39;</span><span class="p">,</span> <span class="nf">(req, res) -&gt;</span>
+  <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&#39;not implemented&#39;</span>
+
+
+<span class="nv">exports.listen = </span><span class="nf">(callback) -&gt;</span>
+  <span class="nv">port = </span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PORT</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">listen</span> <span class="nx">port</span><span class="p">,</span> <span class="nx">callback</span>
+</pre></div>
+
+
+<p>Let&#8217;s create file <em>specs/sofas.spec.coffee</em> which is going to contain our&nbsp;tests.</p>
+<div class="highlight"><pre><span></span><span class="nv">should = </span><span class="nx">require</span> <span class="s">&#39;should&#39;</span>
+
+<span class="nx">describe</span> <span class="s">&#39;Sofas API&#39;</span><span class="p">,</span> <span class="nf">-&gt;</span>
+
+  <span class="nx">describe</span> <span class="s">&#39;/sofas&#39;</span><span class="p">,</span> <span class="nf">-&gt;</span>
+    <span class="nx">it</span> <span class="s">&#39;should return all sofas with GET&#39;</span><span class="p">,</span> <span class="nf">-&gt;</span>
+      <span class="c1"># TODO: write test</span>
+      <span class="p">(</span><span class="kc">false</span><span class="p">).</span><span class="nx">should</span><span class="p">.</span><span class="nx">be</span><span class="p">.</span><span class="nx">true</span><span class="p">()</span>
+
+  <span class="nx">describe</span> <span class="s">&#39;/sofas/:sofa&#39;</span><span class="p">,</span> <span class="nf">-&gt;</span>
+    <span class="nx">it</span> <span class="s">&#39;should return a particular sofa with GET&#39;</span><span class="p">,</span> <span class="nf">-&gt;</span>
+      <span class="c1"># TODO: write test</span>
+      <span class="p">(</span><span class="kc">false</span><span class="p">).</span><span class="nx">should</span><span class="p">.</span><span class="nx">be</span><span class="p">.</span><span class="nx">true</span><span class="p">()</span>
+</pre></div>
+
+
+<p>If you run the tests right now, you should see similar&nbsp;output:</p>
+<div class="highlight"><pre><span></span>gulp <span class="nb">test</span>
+
+  Sofas API
+    /sofas
+       <span class="m">1</span><span class="o">)</span> should <span class="k">return</span> all sofas with GET
+    /sofas/:sofa
+       <span class="m">2</span><span class="o">)</span> should <span class="k">return</span> a particular sofa with GET
+
+
+  <span class="m">0</span> passing <span class="o">(</span>30ms<span class="o">)</span>
+  <span class="m">2</span> failing
+
+  <span class="m">1</span><span class="o">)</span> Sofas API /sofas should <span class="k">return</span> all sofas with GET:
+     AssertionError: expected <span class="nb">false</span> to be <span class="nb">true</span>
+    at Context.&lt;anonymous&gt; <span class="o">(</span>specs/sofas.spec.coffee:8:7<span class="o">)</span>
+
+
+  <span class="m">2</span><span class="o">)</span> Sofas API /sofas/:sofa should <span class="k">return</span> a particular sofa with GET:
+     AssertionError: expected <span class="nb">false</span> to be <span class="nb">true</span>
+    at Context.&lt;anonymous&gt; <span class="o">(</span>specs/sofas.spec.coffee:13:7<span class="o">)</span>
+
+
+
+Message:
+    <span class="m">2</span> tests failed.
+</pre></div>
+
+
+<h2>Implementation</h2>
+<p>Sofas will be stored in CouchDB with the following&nbsp;structure:</p>
+<div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;CouchDB assigned id&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;_rev&quot;</span><span class="p">:</span> <span class="s2">&quot;CouchDB assigned revision&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the sofa&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;price&quot;</span><span class="p">:</span> <span class="s2">&quot;Price of the sofa&quot;</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>With this in mind, let&#8217;s build a module for accessing the&nbsp;database.</p>
+<div class="highlight"><pre><span></span><span class="nv">nano = </span><span class="nx">require</span> <span class="s">&#39;nano&#39;</span>
+<span class="nv">Q    = </span><span class="nx">require</span> <span class="s">&#39;q&#39;</span>
+
+<span class="k">class</span> <span class="nx">DAL</span>
+  <span class="nv">constructor: </span><span class="nf">(port, @database) -&gt;</span>
+    <span class="vi">@conn = </span><span class="nx">nano</span><span class="p">(</span><span class="s">&quot;http://localhost:</span><span class="si">#{</span><span class="nx">port</span><span class="si">}</span><span class="s">&quot;</span><span class="p">)</span>
+
+  <span class="c1"># Returns a promise reseting database</span>
+  <span class="nv">resetDatabase: </span><span class="nf">(withSamples=false) -&gt;</span>
+    <span class="nv">docs = </span><span class="p">[</span><span class="nx">@_sofaViews</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nx">withSamples</span>
+      <span class="nv">docs = </span><span class="nx">docs</span><span class="p">.</span><span class="nx">concat</span> <span class="nx">@_sofaSamples</span>
+
+    <span class="nx">@_deleteDb</span><span class="p">()</span>
+      <span class="p">.</span><span class="nx">then</span> <span class="nf">=&gt;</span> <span class="nx">@_createDb</span><span class="p">()</span>
+      <span class="p">.</span><span class="nx">then</span> <span class="nf">=&gt;</span> <span class="nx">Q</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="nx">docs</span><span class="p">.</span><span class="nx">map</span> <span class="nf">(d) =&gt;</span> <span class="nx">@_insertDoc</span><span class="p">(</span><span class="nx">d</span><span class="p">))</span>
+
+  <span class="c1"># Returns a promise of sofas</span>
+  <span class="c1"># If you provide the id- you&#39;ll get an array with a particular sofa in it</span>
+  <span class="nv">getSofas: </span><span class="nf">(id=null) -&gt;</span>
+    <span class="nv">params = </span><span class="p">{}</span>
+    <span class="nv">params.key = </span><span class="nx">id</span> <span class="k">if</span> <span class="nx">id</span><span class="o">?</span>
+
+    <span class="nx">@_view</span><span class="p">(</span><span class="s">&#39;sofas&#39;</span><span class="p">,</span> <span class="s">&#39;all&#39;</span><span class="p">,</span> <span class="nx">params</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">then</span> <span class="nf">(res) -&gt;</span>
+        <span class="nv">body = </span><span class="nx">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="nv">sofas = </span><span class="p">(</span><span class="nx">row</span><span class="p">.</span><span class="nx">value</span> <span class="k">for</span> <span class="nx">row</span> <span class="k">in</span> <span class="nx">body</span><span class="p">.</span><span class="nx">rows</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nx">sofas</span>
+
+  <span class="nv">_sofaViews:</span>
+    <span class="nv">_id: </span><span class="s">&#39;_design/sofas&#39;</span>
+    <span class="nv">views:</span>
+      <span class="nv">all:</span>
+        <span class="nv">map: </span><span class="nf">(doc) -&gt;</span>
+          <span class="k">if</span> <span class="nx">doc</span><span class="p">.</span><span class="nx">type</span> <span class="o">is</span> <span class="s">&#39;Sofa&#39;</span>
+            <span class="nx">emit</span> <span class="nx">doc</span><span class="p">.</span><span class="nx">_id</span><span class="p">,</span> <span class="nx">doc</span>
+
+  <span class="nv">_sofaSamples: </span><span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nv">_id: </span><span class="s">&#39;sofa1&#39;</span>
+      <span class="nv">type: </span><span class="s">&#39;Sofa&#39;</span>
+      <span class="nv">name: </span><span class="s">&#39;Sofa1&#39;</span>
+      <span class="nv">price: </span><span class="mi">400</span>
+    <span class="p">}</span>
+    <span class="p">{</span>
+      <span class="nv">_id: </span><span class="s">&#39;sofa2&#39;</span>
+      <span class="nv">type: </span><span class="s">&#39;Sofa&#39;</span>
+      <span class="nv">name: </span><span class="s">&#39;Sofa2&#39;</span>
+      <span class="nv">price: </span><span class="mi">300</span>
+    <span class="p">}</span>
+    <span class="p">{</span>
+      <span class="nv">_id: </span><span class="s">&#39;sofa3&#39;</span>
+      <span class="nv">type: </span><span class="s">&#39;Sofa&#39;</span>
+      <span class="nv">name: </span><span class="s">&#39;Sofa3&#39;</span>
+      <span class="nv">price: </span><span class="mi">500</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+
+  <span class="c1"># Returns promise of creating database</span>
+  <span class="nv">_createDb: </span><span class="nf">-&gt;</span>
+    <span class="nv">d = </span><span class="nx">Q</span><span class="p">.</span><span class="nx">defer</span><span class="p">()</span>
+    <span class="nx">@conn</span><span class="p">.</span><span class="nx">db</span><span class="p">.</span><span class="nx">create</span> <span class="nx">@database</span><span class="p">,</span> <span class="nx">d</span><span class="p">.</span><span class="nx">makeNodeResolver</span><span class="p">()</span>
+    <span class="nx">d</span><span class="p">.</span><span class="nx">promise</span>
+
+  <span class="c1"># Returns promise of deleting database</span>
+  <span class="nv">_deleteDb: </span><span class="nf">(ignoreMissing=true)-&gt;</span>
+    <span class="nv">d = </span><span class="nx">Q</span><span class="p">.</span><span class="nx">defer</span><span class="p">()</span>
+    <span class="nx">@conn</span><span class="p">.</span><span class="nx">db</span><span class="p">.</span><span class="nx">destroy</span> <span class="nx">@database</span><span class="p">,</span> <span class="nf">(err, res) -&gt;</span>
+      <span class="nv">err = </span><span class="kc">null</span> <span class="k">if</span> <span class="nx">err</span><span class="o">?</span> <span class="o">and</span> <span class="nx">err</span><span class="p">.</span><span class="nx">statusCode</span> <span class="o">is</span> <span class="mi">404</span> <span class="o">and</span> <span class="nx">ignoreMissing</span>
+      <span class="nx">d</span><span class="p">.</span><span class="nx">makeNodeResolver</span><span class="p">()(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span>
+    <span class="nx">d</span><span class="p">.</span><span class="nx">promise</span>
+
+
+  <span class="c1"># Returns promise of inserting a doc</span>
+  <span class="nv">_insertDoc: </span><span class="nf">(doc) -&gt;</span>
+    <span class="nv">d = </span><span class="nx">Q</span><span class="p">.</span><span class="nx">defer</span><span class="p">()</span>
+    <span class="nx">@conn</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">@database</span><span class="p">).</span><span class="nx">insert</span> <span class="nx">doc</span><span class="p">,</span> <span class="nx">d</span><span class="p">.</span><span class="nx">makeNodeResolver</span><span class="p">()</span>
+    <span class="nx">d</span><span class="p">.</span><span class="nx">promise</span>
+
+
+  <span class="c1"># Returns promise of CouchDB view</span>
+  <span class="nv">_view: </span><span class="nf">(designDoc, view, params={}) -&gt;</span>
+    <span class="nv">d = </span><span class="nx">Q</span><span class="p">.</span><span class="nx">defer</span><span class="p">()</span>
+    <span class="nx">@conn</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">@database</span><span class="p">).</span><span class="nx">view</span> <span class="nx">designDoc</span><span class="p">,</span> <span class="nx">view</span><span class="p">,</span> <span class="nx">params</span><span class="p">,</span> <span class="nx">d</span><span class="p">.</span><span class="nx">makeNodeResolver</span><span class="p">()</span>
+    <span class="nx">d</span><span class="p">.</span><span class="nx">promise</span>
+
+
+<span class="nv">module.exports = </span><span class="nx">DAL</span>
+</pre></div>
+
+
+<p>What&#8217;s missing is the endpoint and test implementation. Let&#8217;s start with the&nbsp;tests.</p>
+<div class="highlight"><pre><span></span><span class="gh">diff --git a/specs/sofas.spec.coffee b/specs/sofas.spec.coffee</span>
+<span class="gh">index 8c1eb84..efbff58 100644</span>
+<span class="gd">--- a/specs/sofas.spec.coffee</span>
+<span class="gi">+++ b/specs/sofas.spec.coffee</span>
+<span class="gu">@@ -1,13 +1,54 @@</span>
+<span class="gd">-should = require &#39;should&#39;</span>
+<span class="gi">+should  = require &#39;should&#39;</span>
+<span class="gi">+DAL     = require &#39;../dal&#39;</span>
+<span class="gi">+request = require &#39;supertest&#39;</span>
+<span class="gi">+request = request &quot;http://localhost:#{process.env.PORT}&quot;</span>
+<span class="gi">+server  = require &#39;../server&#39;</span>
+<span class="gi">+</span>
+<span class="gi">+app = null</span>
+
+ describe &#39;Sofas API&#39;, -&gt;
+
+<span class="gi">+  beforeEach (done) -&gt;</span>
+<span class="gi">+    # Reset database and start express server before each test</span>
+<span class="gi">+    dal = new DAL(process.env.COUCH_PORT, process.env.DATABASE)</span>
+<span class="gi">+    dal.resetDatabase(true)</span>
+<span class="gi">+      .then -&gt;</span>
+<span class="gi">+        app = server.listen done</span>
+<span class="gi">+      .fail (err) -&gt; done err</span>
+<span class="gi">+</span>
+<span class="gi">+  # Close express server after each test</span>
+<span class="gi">+  afterEach (done) -&gt;</span>
+<span class="gi">+    app.close done</span>
+<span class="gi">+</span>
+<span class="gi">+</span>
+   describe &#39;/sofas&#39;, -&gt;
+<span class="gd">-    it &#39;should return all sofas with GET&#39;, -&gt;</span>
+<span class="gd">-      # TODO: write test</span>
+<span class="gd">-      (false).should.be.true()</span>
+<span class="gi">+    it &#39;should return all sofas with GET&#39;, (done) -&gt;</span>
+<span class="gi">+      request</span>
+<span class="gi">+        .get &#39;/sofas&#39;</span>
+<span class="gi">+        .expect 200</span>
+<span class="gi">+        .expect (res) -&gt;</span>
+<span class="gi">+          sofas = res.body</span>
+<span class="gi">+          sofas.should.have.length(3)</span>
+<span class="gi">+          for s in sofas</span>
+<span class="gi">+            s.should.have.property(&#39;_id&#39;)</span>
+<span class="gi">+            s.should.have.property(&#39;_rev&#39;)</span>
+<span class="gi">+            s.should.have.property(&#39;name&#39;)</span>
+<span class="gi">+            s.should.have.property(&#39;price&#39;)</span>
+<span class="gi">+</span>
+<span class="gi">+        .end done</span>
+<span class="gi">+          </span>
+<span class="gi">+</span>
+
+   describe &#39;/sofas/:sofa&#39;, -&gt;
+<span class="gd">-    it &#39;should return a particular sofa with GET&#39;, -&gt;</span>
+<span class="gd">-      # TODO: write test</span>
+<span class="gd">-      (false).should.be.true()</span>
+<span class="gi">+    it &#39;should return a particular sofa with GET&#39;, (done) -&gt;</span>
+<span class="gi">+      request</span>
+<span class="gi">+        .get &#39;/sofas/sofa1&#39;</span>
+<span class="gi">+        .expect 200</span>
+<span class="gi">+        .expect (res) -&gt;</span>
+<span class="gi">+          sofa = res.body</span>
+<span class="gi">+          sofa.should.have.property(&#39;_id&#39;)</span>
+<span class="gi">+          sofa.should.have.property(&#39;_rev&#39;)</span>
+<span class="gi">+          sofa.should.have.property(&#39;name&#39;)</span>
+<span class="gi">+          sofa.should.have.property(&#39;price&#39;)</span>
+<span class="gi">+</span>
+<span class="gi">+        .end done</span>
+</pre></div>
+
+
+<p>Now the&nbsp;endpoints:</p>
+<div class="highlight"><pre><span></span><span class="gh">diff --git a/server.coffee b/server.coffee</span>
+<span class="gh">index 98f1918..a0d30ce 100644</span>
+<span class="gd">--- a/server.coffee</span>
+<span class="gi">+++ b/server.coffee</span>
+<span class="gu">@@ -1,16 +1,27 @@</span>
+ express    = require &#39;express&#39;
+<span class="gi">+DAL        = require &#39;./dal&#39;</span>
+
+<span class="gi">+dal = new DAL(process.env.COUCH_PORT, process.env.DATABASE)</span>
+ app = express()
+
+ app.get &#39;/sofas&#39;, (req, res) -&gt;
+<span class="gd">-  throw new Error &#39;not implemented&#39;</span>
+<span class="gi">+  dal.getSofas()</span>
+<span class="gi">+    .then (sofas) -&gt;</span>
+<span class="gi">+      res.json(sofas)</span>
+<span class="gi">+    .fail (err) -&gt; res.status(err.statusCode).send()</span>
+
+ app.get &#39;/sofas/:sofa&#39;, (req, res) -&gt;
+<span class="gd">-  throw new Error &#39;not implemented&#39;</span>
+<span class="gi">+  dal.getSofas(req.params.sofa)</span>
+<span class="gi">+    .then (sofas) -&gt;</span>
+<span class="gi">+      if sofas.length isnt 1</span>
+<span class="gi">+        res.status(404).send()</span>
+<span class="gi">+      else</span>
+<span class="gi">+        res.json(sofas[0])</span>
+<span class="gi">+    .fail (err) -&gt; res.status(err.statusCode).send()</span>
+
+
+ exports.listen = (callback) -&gt;
+</pre></div>
+
+
+<p>At this point we can execute <em>gulp test-int</em> command to run tests on real&nbsp;CouchDB:</p>
+<div class="highlight"><pre><span></span>gulp test-int
+
+  Sofas API
+    /sofas
+       ✓ should <span class="k">return</span> all sofas with GET
+    /sofas/:sofa
+       ✓ should <span class="k">return</span> a particular sofa with GET
+
+
+  <span class="m">2</span> passing <span class="o">(</span>204ms<span class="o">)</span>
+</pre></div>
+
+
+<h2>mock-couch&nbsp;tests</h2>
+<p>So how do we use mock-couch for this? Mock-couch is an <span class="caps">HTTP</span> server based on <a href="http://mcavage.me/node-restify/">Restify</a>. Note that <a href="https://nodejs.org/">Node.js</a> runtime is single-threaded therefore we won&#8217;t be able to run both express and mock-couch at the same time. However, it is possible to run mock-couch on another&nbsp;process.</p>
+<p>Node provides a couple of ways to create processes out of the box. We&#8217;ll use one called <a href="https://nodejs.org/api/child_process.html#child_process_child_process_fork_modulepath_args_options">forking</a>: not only we&#8217;ll be able to control the lifecycle of the forked child process but we&#8217;ll also have the ability to send and receive messages between parent and the&nbsp;child.</p>
+<p><span class="caps">OK</span>, less talk and more forking. We&#8217;ll do the forking in <em>gulp test</em>&nbsp;task:</p>
+<div class="highlight"><pre><span></span><span class="gh">diff --git a/gulpfile.coffee b/gulpfile.coffee</span>
+<span class="gh">index cbd61b5..1200834 100644</span>
+<span class="gd">--- a/gulpfile.coffee</span>
+<span class="gi">+++ b/gulpfile.coffee</span>
+<span class="gu">@@ -6,14 +6,48 @@ mocha   = require &#39;gulp-mocha&#39;</span>
+ sources =
+   tests: &#39;./specs/**/*.spec.coffee&#39;
+
+<span class="gi">+</span>
+ # Task to run tests with mock-couch backend
+ gulp.task &#39;test&#39;, -&gt;
+   process.env.NODE_ENV = &#39;test&#39;
+   process.env.PORT = 3010
+   process.env.COUCH_PORT = 5987
+   process.env.DATABASE = &#39;sofas_test&#39;
+<span class="gd">-  gulp.src(sources.tests)</span>
+<span class="gd">-    .pipe(mocha())</span>
+<span class="gi">+</span>
+<span class="gi">+  fork = require(&#39;child_process&#39;).fork</span>
+<span class="gi">+  couchProcess = fork(&#39;node_modules/gulp/bin/gulp.js&#39;, [&#39;mock-couch&#39;], {cwd: __dirname})</span>
+<span class="gi">+  couchProcess.on &#39;message&#39;, (msg) =&gt;</span>
+<span class="gi">+    if msg is &#39;listening&#39;</span>
+<span class="gi">+      gulp.src(sources.tests)</span>
+<span class="gi">+        .pipe(mocha())</span>
+<span class="gi">+        .once(&#39;error&#39;, (err) -&gt;</span>
+<span class="gi">+          process.exit(1)</span>
+<span class="gi">+        )</span>
+<span class="gi">+        .once(&#39;end&#39;, -&gt;</span>
+<span class="gi">+          process.exit()</span>
+<span class="gi">+        )</span>
+<span class="gi">+</span>
+<span class="gi">+  process.on &#39;exit&#39;, -&gt;</span>
+<span class="gi">+    couchProcess.kill()</span>
+<span class="gi">+</span>
+<span class="gi">+gulp.task &#39;mock-couch&#39;, -&gt;</span>
+<span class="gi">+  process.env.NODE_ENV = &#39;test&#39;</span>
+<span class="gi">+  process.env.PORT = 3010</span>
+<span class="gi">+  process.env.COUCH_PORT = 5987</span>
+<span class="gi">+  process.env.DATABASE = &#39;sofas_test&#39;</span>
+<span class="gi">+</span>
+<span class="gi">+  mockCouch = require &#39;mock-couch&#39;</span>
+<span class="gi">+  couchdb = mockCouch.createServer()</span>
+<span class="gi">+  DAL = require &#39;./dal&#39;</span>
+<span class="gi">+  dal = new DAL(process.env.COUCH_PORT, process.env.DATABASE)</span>
+<span class="gi">+  docs = [dal._sofaViews]</span>
+<span class="gi">+  docs = docs.concat dal._sofaSamples</span>
+<span class="gi">+</span>
+<span class="gi">+  couchdb.addDB process.env.DATABASE, docs</span>
+<span class="gi">+</span>
+<span class="gi">+  couchdb.listen process.env.COUCH_PORT, -&gt;</span>
+<span class="gi">+    process.send &#39;listening&#39;</span>
+<span class="gi">+</span>
+
+ # Task to run integration tests (real CouchDB backend)
+ gulp.task &#39;test-int&#39;, -&gt;
+</pre></div>
+
+
+<p>Also, we need a slight change to the test&nbsp;setup:</p>
+<div class="highlight"><pre><span></span><span class="gh">diff --git a/specs/sofas.spec.coffee b/specs/sofas.spec.coffee</span>
+<span class="gh">index efbff58..93e7bd2 100644</span>
+<span class="gd">--- a/specs/sofas.spec.coffee</span>
+<span class="gi">+++ b/specs/sofas.spec.coffee</span>
+<span class="gu">@@ -9,12 +9,17 @@ app = null</span>
+ describe &#39;Sofas API&#39;, -&gt;
+
+   beforeEach (done) -&gt;
+<span class="gd">-    # Reset database and start express server before each test</span>
+<span class="gd">-    dal = new DAL(process.env.COUCH_PORT, process.env.DATABASE)</span>
+<span class="gd">-    dal.resetDatabase(true)</span>
+<span class="gd">-      .then -&gt;</span>
+<span class="gd">-        app = server.listen done</span>
+<span class="gd">-      .fail (err) -&gt; done err</span>
+<span class="gi">+</span>
+<span class="gi">+    if process.env.NODE_ENV is &#39;test-int&#39;</span>
+<span class="gi">+      # Reset database and start express server before each test</span>
+<span class="gi">+      dal = new DAL(process.env.COUCH_PORT, process.env.DATABASE)</span>
+<span class="gi">+      dal.resetDatabase(true)</span>
+<span class="gi">+        .then -&gt;</span>
+<span class="gi">+          app = server.listen done</span>
+<span class="gi">+        .fail (err) -&gt; done err</span>
+<span class="gi">+    else</span>
+<span class="gi">+      app = server.listen done</span>
+<span class="gi">+</span>
+
+   # Close express server after each test
+   afterEach (done) -&gt;
+</pre></div>
+
+
+<h2>Moment of&nbsp;Truth</h2>
+<p>If you try running <code>gulp test</code> right now, you should see similar&nbsp;output:</p>
+<div class="highlight"><pre><span></span>gulp <span class="nb">test</span>
+
+  Sofas API
+    /sofas
+       ✓ should <span class="k">return</span> all sofas with GET <span class="o">(</span>125ms<span class="o">)</span>
+    /sofas/:sofa
+       ✓ should <span class="k">return</span> a particular sofa with GET <span class="o">(</span>41ms<span class="o">)</span>
+
+
+  <span class="m">2</span> passing <span class="o">(</span>178ms<span class="o">)</span>
+</pre></div>
+
+
+<p>As you can see the tests completed slightly faster than with real CouchDB. In a small code base like this, it&#8217;s hardly worth switching to mock-couch, if execution speed is your only motivation. However, with bigger codebases, the speed improvement can become very&nbsp;apparent.</p>
+<p>Besides speed, there&#8217;s another benefit to this approach: you don&#8217;t actually need CouchDB to test your project. The simplified build process is especially useful with Continuous Integration platforms like <a href="http://travis-ci.org/">Travis <span class="caps">CI</span></a> and <a href="https://codeship.com">Codeship</a>.</p>
+<h2>Resources</h2>
+<ul>
+<li><a href="https://github.com/reederz/express-mock-couch-showcase">Code on&nbsp;GitHub</a></li>
+<li><a href="https://github.com/chris-l/mock-couch">mock-couch</a></li>
+</ul>
+  </div>
+  
+<div class="article-tag-list">
+<span class="label label-default">Tags</span>
+	<a href="http://reederz.com/tag/couchdb.html"><i class="fa fa-tag"></i>couchdb</a>&nbsp;
+	<a href="http://reederz.com/tag/mock-couch.html"><i class="fa fa-tag"></i>mock-couch</a>&nbsp;
+	<a href="http://reederz.com/tag/express.html"><i class="fa fa-tag"></i>express</a>&nbsp;
+	<a href="http://reederz.com/tag/javascript.html"><i class="fa fa-tag"></i>javascript</a>&nbsp;
+	<a href="http://reederz.com/tag/nodejs.html"><i class="fa fa-tag"></i>nodejs</a>&nbsp;
+	<a href="http://reederz.com/tag/back-end.html"><i class="fa fa-tag"></i>back-end</a>&nbsp;
+</div>
+  <div class="comments">
+	<h2>Comments</h2>
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+				   (function() {
+						var dsq = document.createElement('script');
+						dsq.type = 'text/javascript'; dsq.async = true;
+						dsq.src = '//reederz.disqus.com/embed.js';
+						(document.getElementsByTagName('head')[0] ||
+						 document.getElementsByTagName('body')[0]).appendChild(dsq);
+				  })();
+	</script>
+  </div>
+</article>
+        </div><!-- /content -->
+
+        <div class="col-md-3 sidebar-nav" id="sidebar">
+
+<div class="row">
+
+<div class="col-xs-6 col-md-12">
+<h4><i class="fa fa-comment fa-fw fa-lg"></i> Social</h4>
+<ul class="list-unstyled social-links">
+    <li><a href="https://keybase.io/reederz" target="_blank">
+	  <i class="fa fa-lock fa-fw fa-lg" title="keybase.io/reederz"></i>
+		keybase.io/reederz
+	</a></li>
+    <li><a href="https://github.com/reederz" target="_blank">
+	  <i class="fa fa-github-square fa-fw fa-lg" title="github"></i>
+		github
+	</a></li>
+    <li><a href="https://twitter.com/reederz" target="_blank">
+	  <i class="fa fa-twitter-square fa-fw fa-lg" title="twitter"></i>
+		twitter
+	</a></li>
+    <li><a href="https://medium.com/@reederz" target="_blank">
+	  <i class="fa fa-medium fa-fw fa-lg" title="medium"></i>
+		medium
+	</a></li>
+</ul>
+</div>
+
+
+</div> <!-- /row -->
+
+  <h4><i class="fa fa-link fa-fw fa-lg"></i> Links</h4>
+  <ul class="list-unstyled category-links">
+    <li><a href="https://freedom.press/" >
+      <i class="fa fa-fw fa-external-link-square fa-lg"></i> freedom.press</a></li>
+    <li><a href="http://www.cyanogenmod.org/" >
+      <i class="fa fa-fw fa-external-link-square fa-lg"></i> CyanogenMod</a></li>
+    <li><a href="https://www.torproject.org" >
+      <i class="fa fa-fw fa-external-link-square fa-lg"></i> Tor Browser</a></li>
+    <li><a href="https://whispersystems.org/" >
+      <i class="fa fa-fw fa-external-link-square fa-lg"></i> Open Whisper Systems</a></li>
+    <li><a href="http://projectdanube.org/" >
+      <i class="fa fa-fw fa-external-link-square fa-lg"></i> Project Danube</a></li>
+    <li><a href="https://playsignage.com/" >
+      <i class="fa fa-fw fa-external-link-square fa-lg"></i> Play Digital Signage</a></li>
+    <li><a href="https://www.archlinux.org/" >
+      <i class="fa fa-fw fa-external-link-square fa-lg"></i> Arch Linux</a></li>
+    <li><a href="https://www.toptal.com/resume/justas-azna#select-just-spectacular-programmers-now" >
+      <i class="fa fa-fw fa-external-link-square fa-lg"></i> My Toptal profile</a></li>
+  </ul>
+<h4><i class="fa fa-tags fa-fw fa-lg"></i> Tags</h4>
+<p class="tag-cloud">
+      <a href="http://reederz.com/tag/nginx.html">
+        <i class="fa fa-tag fa-fw fa-lg"></i>nginx
+      </a>
+      <a href="http://reederz.com/tag/spam.html">
+        <i class="fa fa-tag fa-fw fa-lg"></i>spam
+      </a>
+      <a href="http://reederz.com/tag/google-analytics.html">
+        <i class="fa fa-tag fa-fw fa-lg"></i>google-analytics
+      </a>
+      <a href="http://reederz.com/tag/couchdb.html">
+        <i class="fa fa-tag fa-fw fa-lg"></i>couchdb
+      </a>
+      <a href="http://reederz.com/tag/mock-couch.html">
+        <i class="fa fa-tag fa-fw fa-lg"></i>mock-couch
+      </a>
+      <a href="http://reederz.com/tag/express.html">
+        <i class="fa fa-tag fa-fw fa-lg"></i>express
+      </a>
+      <a href="http://reederz.com/tag/javascript.html">
+        <i class="fa fa-tag fa-fw fa-lg"></i>javascript
+      </a>
+      <a href="http://reederz.com/tag/nodejs.html">
+        <i class="fa fa-tag fa-fw fa-lg"></i>nodejs
+      </a>
+      <a href="http://reederz.com/tag/back-end.html">
+        <i class="fa fa-tag fa-fw fa-lg"></i>back-end
+      </a>
+      <a href="http://reederz.com/tag/freelancing.html">
+        <i class="fa fa-tag fa-fw fa-lg"></i>freelancing
+      </a>
+      <a href="http://reederz.com/tag/toptal.html">
+        <i class="fa fa-tag fa-fw fa-lg"></i>toptal
+      </a>
+      <a href="http://reederz.com/tag/coursera.html">
+        <i class="fa fa-tag fa-fw fa-lg"></i>coursera
+      </a>
+      <a href="http://reederz.com/tag/crypto.html">
+        <i class="fa fa-tag fa-fw fa-lg"></i>crypto
+      </a>
+</p>
+<h4><i class="fa fa-rss fa-fw fa-lg"></i> Feeds</h4>
+<ul class="list-unstyled">
+    <li><a href="http://reederz.com/feeds/all.atom.xml" 
+		   type="application/atom+xml" rel="alternate">
+		<i class="fa fa-rss-square fa-fw fa-lg"></i> Atom Feed</a></li>
+</ul>
+
+<hr />
+
+        </div><!--/sidebar -->
+      </div><!--/row-->
+    </div><!--/.container /#main-container -->
+
+    <footer id="site-footer">
+ 
+      <address id="site-colophon">
+        <p class="text-center text-muted">
+        Site built using <a href="http://getpelican.com/" target="_blank">Pelican</a>
+        &nbsp;&bull;&nbsp; Theme based on
+        <a href="http://www.voidynullness.net/page/voidy-bootstrap-pelican-theme/"
+           target="_blank">VoidyBootstrap</a> by 
+        <a href="http://www.robertiwancz.com/"
+           target="_blank">RKI</a>  
+        </p>
+      </address><!-- /colophon  -->
+    </footer>
+
+<!-- DISQUS script for displaying comment count -->
+<script type="text/javascript">
+    var disqus_shortname = 'reederz';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+
+    <!-- javascript -->
+   
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+
+
+  </body>
+</html>
