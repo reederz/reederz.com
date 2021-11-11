@@ -111,14 +111,13 @@
 <h2>Setup</h2>
 <p>Our sample <span class="caps">API</span> will expose functionality to access a database of sofa&#8217;s. Let&#8217;s set it&nbsp;up.</p>
 <p>Structure and&nbsp;dependencies</p>
-<div class="highlight"><pre><span></span>mkdir -p sofa-api/specs
+<div class="highlight"><pre><span></span><code>mkdir -p sofa-api/specs
 <span class="nb">cd</span> sofa-api
 npm install mock-couch coffee-script gulp gulp-mocha should supertest express nano q
-</pre></div>
-
+</code></pre></div>
 
 <p>gulpfile.coffee</p>
-<div class="highlight"><pre><span></span><span class="nx">require</span> <span class="s">&#39;coffee-script/register&#39;</span>
+<div class="highlight"><pre><span></span><code><span class="nx">require</span> <span class="s">&#39;coffee-script/register&#39;</span>
 
 <span class="nv">gulp    = </span><span class="nx">require</span> <span class="s">&#39;gulp&#39;</span>
 <span class="nv">mocha   = </span><span class="nx">require</span> <span class="s">&#39;gulp-mocha&#39;</span>
@@ -153,11 +152,10 @@ npm install mock-couch coffee-script gulp gulp-mocha should supertest express na
 
   <span class="nv">server = </span><span class="nx">require</span> <span class="s">&#39;./server&#39;</span>
   <span class="nx">server</span><span class="p">.</span><span class="nx">listen</span><span class="p">()</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>server.coffee</p>
-<div class="highlight"><pre><span></span><span class="nv">express    = </span><span class="nx">require</span> <span class="s">&#39;express&#39;</span>
+<div class="highlight"><pre><span></span><code><span class="nv">express    = </span><span class="nx">require</span> <span class="s">&#39;express&#39;</span>
 
 <span class="nv">app = </span><span class="nx">express</span><span class="p">()</span>
 
@@ -171,11 +169,10 @@ npm install mock-couch coffee-script gulp gulp-mocha should supertest express na
 <span class="nv">exports.listen = </span><span class="nf">(callback) -&gt;</span>
   <span class="nv">port = </span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PORT</span>
   <span class="nx">app</span><span class="p">.</span><span class="nx">listen</span> <span class="nx">port</span><span class="p">,</span> <span class="nx">callback</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>Let&#8217;s create file <em>specs/sofas.spec.coffee</em> which is going to contain our&nbsp;tests.</p>
-<div class="highlight"><pre><span></span><span class="nv">should = </span><span class="nx">require</span> <span class="s">&#39;should&#39;</span>
+<div class="highlight"><pre><span></span><code><span class="nv">should = </span><span class="nx">require</span> <span class="s">&#39;should&#39;</span>
 
 <span class="nx">describe</span> <span class="s">&#39;Sofas API&#39;</span><span class="p">,</span> <span class="nf">-&gt;</span>
 
@@ -188,11 +185,10 @@ npm install mock-couch coffee-script gulp gulp-mocha should supertest express na
     <span class="nx">it</span> <span class="s">&#39;should return a particular sofa with GET&#39;</span><span class="p">,</span> <span class="nf">-&gt;</span>
       <span class="c1"># TODO: write test</span>
       <span class="p">(</span><span class="kc">false</span><span class="p">).</span><span class="nx">should</span><span class="p">.</span><span class="nx">be</span><span class="p">.</span><span class="nx">true</span><span class="p">()</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>If you run the tests right now, you should see similar&nbsp;output:</p>
-<div class="highlight"><pre><span></span>gulp <span class="nb">test</span>
+<div class="highlight"><pre><span></span><code>gulp <span class="nb">test</span>
 
   Sofas API
     /sofas
@@ -217,22 +213,20 @@ npm install mock-couch coffee-script gulp gulp-mocha should supertest express na
 
 Message:
     <span class="m">2</span> tests failed.
-</pre></div>
-
+</code></pre></div>
 
 <h2>Implementation</h2>
 <p>Sofas will be stored in CouchDB with the following&nbsp;structure:</p>
-<div class="highlight"><pre><span></span><span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
     <span class="nt">&quot;_id&quot;</span><span class="p">:</span> <span class="s2">&quot;CouchDB assigned id&quot;</span><span class="p">,</span>
     <span class="nt">&quot;_rev&quot;</span><span class="p">:</span> <span class="s2">&quot;CouchDB assigned revision&quot;</span><span class="p">,</span>
     <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the sofa&quot;</span><span class="p">,</span>
     <span class="nt">&quot;price&quot;</span><span class="p">:</span> <span class="s2">&quot;Price of the sofa&quot;</span>
 <span class="p">}</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>With this in mind, let&#8217;s build a module for accessing the&nbsp;database.</p>
-<div class="highlight"><pre><span></span><span class="nv">nano = </span><span class="nx">require</span> <span class="s">&#39;nano&#39;</span>
+<div class="highlight"><pre><span></span><code><span class="nv">nano = </span><span class="nx">require</span> <span class="s">&#39;nano&#39;</span>
 <span class="nv">Q    = </span><span class="nx">require</span> <span class="s">&#39;q&#39;</span>
 
 <span class="k">class</span> <span class="nx">DAL</span>
@@ -320,11 +314,10 @@ Message:
 
 
 <span class="nv">module.exports = </span><span class="nx">DAL</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>What&#8217;s missing is the endpoint and test implementation. Let&#8217;s start with the&nbsp;tests.</p>
-<div class="highlight"><pre><span></span><span class="gh">diff --git a/specs/sofas.spec.coffee b/specs/sofas.spec.coffee</span>
+<div class="highlight"><pre><span></span><code><span class="gh">diff --git a/specs/sofas.spec.coffee b/specs/sofas.spec.coffee</span>
 <span class="gh">index 8c1eb84..efbff58 100644</span>
 <span class="gd">--- a/specs/sofas.spec.coffee</span>
 <span class="gi">+++ b/specs/sofas.spec.coffee</span>
@@ -390,11 +383,10 @@ Message:
 <span class="gi">+          sofa.should.have.property(&#39;price&#39;)</span>
 <span class="gi">+</span>
 <span class="gi">+        .end done</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>Now the&nbsp;endpoints:</p>
-<div class="highlight"><pre><span></span><span class="gh">diff --git a/server.coffee b/server.coffee</span>
+<div class="highlight"><pre><span></span><code><span class="gh">diff --git a/server.coffee b/server.coffee</span>
 <span class="gh">index 98f1918..a0d30ce 100644</span>
 <span class="gd">--- a/server.coffee</span>
 <span class="gi">+++ b/server.coffee</span>
@@ -424,11 +416,10 @@ Message:
 
 
  exports.listen = (callback) -&gt;
-</pre></div>
-
+</code></pre></div>
 
 <p>At this point we can execute <em>gulp test-int</em> command to run tests on real&nbsp;CouchDB:</p>
-<div class="highlight"><pre><span></span>gulp test-int
+<div class="highlight"><pre><span></span><code>gulp test-int
 
   Sofas API
     /sofas
@@ -438,14 +429,13 @@ Message:
 
 
   <span class="m">2</span> passing <span class="o">(</span>204ms<span class="o">)</span>
-</pre></div>
-
+</code></pre></div>
 
 <h2>mock-couch&nbsp;tests</h2>
 <p>So how do we use mock-couch for this? Mock-couch is an <span class="caps">HTTP</span> server based on <a href="http://mcavage.me/node-restify/">Restify</a>. Note that <a href="https://nodejs.org/">Node.js</a> runtime is single-threaded therefore we won&#8217;t be able to run both express and mock-couch at the same time. However, it is possible to run mock-couch on another&nbsp;process.</p>
 <p>Node provides a couple of ways to create processes out of the box. We&#8217;ll use one called <a href="https://nodejs.org/api/child_process.html#child_process_child_process_fork_modulepath_args_options">forking</a>: not only we&#8217;ll be able to control the lifecycle of the forked child process but we&#8217;ll also have the ability to send and receive messages between parent and the&nbsp;child.</p>
 <p><span class="caps">OK</span>, less talk and more forking. We&#8217;ll do the forking in <em>gulp test</em>&nbsp;task:</p>
-<div class="highlight"><pre><span></span><span class="gh">diff --git a/gulpfile.coffee b/gulpfile.coffee</span>
+<div class="highlight"><pre><span></span><code><span class="gh">diff --git a/gulpfile.coffee b/gulpfile.coffee</span>
 <span class="gh">index cbd61b5..1200834 100644</span>
 <span class="gd">--- a/gulpfile.coffee</span>
 <span class="gi">+++ b/gulpfile.coffee</span>
@@ -500,11 +490,10 @@ Message:
 
  # Task to run integration tests (real CouchDB backend)
  gulp.task &#39;test-int&#39;, -&gt;
-</pre></div>
-
+</code></pre></div>
 
 <p>Also, we need a slight change to the test&nbsp;setup:</p>
-<div class="highlight"><pre><span></span><span class="gh">diff --git a/specs/sofas.spec.coffee b/specs/sofas.spec.coffee</span>
+<div class="highlight"><pre><span></span><code><span class="gh">diff --git a/specs/sofas.spec.coffee b/specs/sofas.spec.coffee</span>
 <span class="gh">index efbff58..93e7bd2 100644</span>
 <span class="gd">--- a/specs/sofas.spec.coffee</span>
 <span class="gi">+++ b/specs/sofas.spec.coffee</span>
@@ -532,12 +521,11 @@ Message:
 
    # Close express server after each test
    afterEach (done) -&gt;
-</pre></div>
-
+</code></pre></div>
 
 <h2>Moment of&nbsp;Truth</h2>
 <p>If you try running <code>gulp test</code> right now, you should see similar&nbsp;output:</p>
-<div class="highlight"><pre><span></span>gulp <span class="nb">test</span>
+<div class="highlight"><pre><span></span><code>gulp <span class="nb">test</span>
 
   Sofas API
     /sofas
@@ -547,8 +535,7 @@ Message:
 
 
   <span class="m">2</span> passing <span class="o">(</span>178ms<span class="o">)</span>
-</pre></div>
-
+</code></pre></div>
 
 <p>As you can see the tests completed slightly faster than with real CouchDB. In a small code base like this, it&#8217;s hardly worth switching to mock-couch, if execution speed is your only motivation. However, with bigger codebases, the speed improvement can become very&nbsp;apparent.</p>
 <p>Besides speed, there&#8217;s another benefit to this approach: you don&#8217;t actually need CouchDB to test your project. The simplified build process is especially useful with Continuous Integration platforms like <a href="http://travis-ci.org/">Travis <span class="caps">CI</span></a> and <a href="https://codeship.com">Codeship</a>.</p>

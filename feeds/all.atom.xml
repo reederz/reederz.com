@@ -14,17 +14,16 @@
 &lt;h2&gt;&lt;span class="caps"&gt;NGINX&lt;/span&gt;&amp;nbsp;Solution&lt;/h2&gt;
 &lt;p&gt;Since we&amp;#8217;re using &lt;span class="caps"&gt;NGINX&lt;/span&gt; to serve our site, the solution is going to be described for &lt;span class="caps"&gt;NGINX&lt;/span&gt;. Apache people can take a look at this excellent &lt;a href="https://www.addedbytes.com/blog/block-referrer-spam/"&gt;article&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;The official &lt;span class="caps"&gt;NGINX&lt;/span&gt; wiki does mention &lt;a href="http://wiki.nginx.org/Referrer_Spam_Blocking"&gt;a solution&lt;/a&gt; to this problem. Basically, you just use &lt;a href="http://nginx.org/en/docs/http/ngx_http_referer_module.html"&gt;ngx_http_referer_module&lt;/a&gt;* and add something like this to your location or server&amp;nbsp;block:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;valid_referers none blocked server_names *.social-buttons.com social-buttons.com badreferer2.com&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;valid_referers none blocked server_names *.social-buttons.com social-buttons.com badreferer2.com&lt;span class="p"&gt;;&lt;/span&gt;
 
 &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;$invalid_referer&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
   &lt;span class="k"&gt;return&lt;/span&gt;   &lt;span class="m"&gt;444&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
 &lt;span class="o"&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;This works, but what if we want to maintain a larger blacklist of referers? Our &lt;code&gt;valid_referers&lt;/code&gt; directive would get crazy long. If that&amp;#8217;s fine with you, you can stop reading here. It sure isn&amp;#8217;t fine with me&amp;nbsp;:).&lt;/p&gt;
 &lt;p&gt;In order to make our blacklist more maintainable, we can use &lt;a href="http://nginx.org/en/docs/http/ngx_http_map_module.html"&gt;ngx_http_map_module&lt;/a&gt;. Let&amp;#8217;s save &lt;code&gt;/etc/nginx/conf.d/blacklist.conf&lt;/code&gt; file with the following&amp;nbsp;content:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# /etc/nginx/conf.d/blacklist.conf&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# /etc/nginx/conf.d/blacklist.conf&lt;/span&gt;
 
 map &lt;span class="nv"&gt;$http_referer&lt;/span&gt; &lt;span class="nv"&gt;$bad_referer&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
     hostnames&lt;span class="p"&gt;;&lt;/span&gt;
@@ -58,11 +57,10 @@ map &lt;span class="nv"&gt;$http_referer&lt;/span&gt; &lt;span class="nv"&gt;$ba
     &lt;span class="s2"&gt;&amp;quot;~buy-cheap-online.info&amp;quot;&lt;/span&gt;          &lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
     &lt;span class="s2"&gt;&amp;quot;~Get-Free-Traffic-Now.com&amp;quot;&lt;/span&gt;       &lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
 &lt;span class="o"&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Now add conditions to the sites, for which you want to block referer spam&amp;nbsp;bots:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# /etc/nginx/sites-enabled/mysite.conf&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# /etc/nginx/sites-enabled/mysite.conf&lt;/span&gt;
 
 server &lt;span class="o"&gt;{&lt;/span&gt;
   &lt;span class="c1"&gt;# ...&lt;/span&gt;
@@ -73,19 +71,17 @@ server &lt;span class="o"&gt;{&lt;/span&gt;
 
   &lt;span class="c1"&gt;# ...&lt;/span&gt;
 &lt;span class="o"&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;&lt;span class="caps"&gt;OK&lt;/span&gt;, now let&amp;#8217;s test if this thing&amp;nbsp;works:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# with subdomain&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# with subdomain&lt;/span&gt;
  $ curl --referer http://www.social-buttons.com https://fadeit.dk/en
 curl: &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;52&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; Empty reply from server
 
 &lt;span class="c1"&gt;# without subdomain&lt;/span&gt;
  $ curl --referer http://social-buttons.com https://fadeit.dk/en
 curl: &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;52&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; Empty reply from server
-&lt;/pre&gt;&lt;/div&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Sweet! It&amp;nbsp;worked.&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;* Both &lt;a href="http://nginx.org/en/docs/http/ngx_http_referer_module.html"&gt;ngx_http_referer_module&lt;/a&gt; and &lt;a href="http://nginx.org/en/docs/http/ngx_http_map_module.html"&gt;ngx_http_map_module&lt;/a&gt; are included in the standard &lt;span class="caps"&gt;NGINX&lt;/span&gt; distribution and you don&amp;#8217;t need to recompile your&amp;nbsp;server.&lt;/em&gt;&lt;/p&gt;
@@ -95,7 +91,7 @@ curl: &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;52&lt;/span&gt;&
 &lt;ul&gt;
 &lt;li&gt;&lt;a href="https://github.com/oohnoitz/nginx-blacklist"&gt;Blacklist by oohnoitz&lt;/a&gt; which blocks bad bots, pentest tools, surveillance bots, etc. It&amp;#8217;s an excellent addition to the referer spam blacklist described in this&amp;nbsp;post.&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://perishablepress.com/4g-ultimate-referrer-blacklist/"&gt;Ultimate referer&amp;nbsp;blacklist&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><category term="nginx"></category><category term="spam"></category><category term="google-analytics"></category></entry><entry><title>Testing Express.js + CouchDB Applications with mock-couch</title><link href="http://reederz.com/testing-expressjs-couchdb-applications-with-mock-couch.html" rel="alternate"></link><published>2018-09-23T10:00:00+02:00</published><updated>2018-09-23T10:00:00+02:00</updated><author><name>Justas Ažna</name></author><id>tag:reederz.com,2018-09-23:/testing-expressjs-couchdb-applications-with-mock-couch.html</id><summary type="html">&lt;p&gt;There&amp;#8217;s a way to test Express.js + CouchDB web apps with confidence of end-to-end tests and execution speed of unit-tests. Meet mock-couch- a node.js module which pretends to be a CouchDB server for testing&amp;nbsp;purposes.&lt;/p&gt;</summary><content type="html">&lt;h2&gt;Prerequisites&lt;/h2&gt;
+&lt;/ul&gt;</content><category term="archive"></category><category term="nginx"></category><category term="spam"></category><category term="google-analytics"></category></entry><entry><title>Testing Express.js + CouchDB Applications with mock-couch</title><link href="http://reederz.com/testing-expressjs-couchdb-applications-with-mock-couch.html" rel="alternate"></link><published>2018-09-23T10:00:00+02:00</published><updated>2018-09-23T10:00:00+02:00</updated><author><name>Justas Ažna</name></author><id>tag:reederz.com,2018-09-23:/testing-expressjs-couchdb-applications-with-mock-couch.html</id><summary type="html">&lt;p&gt;There&amp;#8217;s a way to test Express.js + CouchDB web apps with confidence of end-to-end tests and execution speed of unit-tests. Meet mock-couch- a node.js module which pretends to be a CouchDB server for testing&amp;nbsp;purposes.&lt;/p&gt;</summary><content type="html">&lt;h2&gt;Prerequisites&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;Originally posted on 2015-07-05 at fadeit.dk/blog which is no longer&amp;nbsp;available&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;The code in this post is based upon &lt;a href="http://coffeescript.org/"&gt;CoffeeScript&lt;/a&gt;, &lt;a href="http://mochajs.org/"&gt;Mocha&lt;/a&gt; and &lt;a href="http://gulpjs.com/"&gt;Gulp&lt;/a&gt; but it should be easily adaptable to other stacks (e.g. &lt;a href="https://www.javascript.com/"&gt;JavaScript&lt;/a&gt;, &lt;a href="https://jasmine.github.io/"&gt;Jasmine&lt;/a&gt; and &lt;a href="http://gruntjs.com/"&gt;Grunt&lt;/a&gt;).&lt;/p&gt;
 &lt;h2&gt;Intro&lt;/h2&gt;
@@ -103,14 +99,13 @@ curl: &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;52&lt;/span&gt;&
 &lt;h2&gt;Setup&lt;/h2&gt;
 &lt;p&gt;Our sample &lt;span class="caps"&gt;API&lt;/span&gt; will expose functionality to access a database of sofa&amp;#8217;s. Let&amp;#8217;s set it&amp;nbsp;up.&lt;/p&gt;
 &lt;p&gt;Structure and&amp;nbsp;dependencies&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;mkdir -p sofa-api/specs
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;mkdir -p sofa-api/specs
 &lt;span class="nb"&gt;cd&lt;/span&gt; sofa-api
 npm install mock-couch coffee-script gulp gulp-mocha should supertest express nano q
-&lt;/pre&gt;&lt;/div&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;gulpfile.coffee&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nx"&gt;require&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;coffee-script/register&amp;#39;&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nx"&gt;require&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;coffee-script/register&amp;#39;&lt;/span&gt;
 
 &lt;span class="nv"&gt;gulp    = &lt;/span&gt;&lt;span class="nx"&gt;require&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;gulp&amp;#39;&lt;/span&gt;
 &lt;span class="nv"&gt;mocha   = &lt;/span&gt;&lt;span class="nx"&gt;require&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;gulp-mocha&amp;#39;&lt;/span&gt;
@@ -145,11 +140,10 @@ npm install mock-couch coffee-script gulp gulp-mocha should supertest express na
 
   &lt;span class="nv"&gt;server = &lt;/span&gt;&lt;span class="nx"&gt;require&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;./server&amp;#39;&lt;/span&gt;
   &lt;span class="nx"&gt;server&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;listen&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;server.coffee&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nv"&gt;express    = &lt;/span&gt;&lt;span class="nx"&gt;require&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;express&amp;#39;&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nv"&gt;express    = &lt;/span&gt;&lt;span class="nx"&gt;require&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;express&amp;#39;&lt;/span&gt;
 
 &lt;span class="nv"&gt;app = &lt;/span&gt;&lt;span class="nx"&gt;express&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
 
@@ -163,11 +157,10 @@ npm install mock-couch coffee-script gulp gulp-mocha should supertest express na
 &lt;span class="nv"&gt;exports.listen = &lt;/span&gt;&lt;span class="nf"&gt;(callback) -&amp;gt;&lt;/span&gt;
   &lt;span class="nv"&gt;port = &lt;/span&gt;&lt;span class="nx"&gt;process&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;env&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;PORT&lt;/span&gt;
   &lt;span class="nx"&gt;app&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;listen&lt;/span&gt; &lt;span class="nx"&gt;port&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;callback&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Let&amp;#8217;s create file &lt;em&gt;specs/sofas.spec.coffee&lt;/em&gt; which is going to contain our&amp;nbsp;tests.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nv"&gt;should = &lt;/span&gt;&lt;span class="nx"&gt;require&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;should&amp;#39;&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nv"&gt;should = &lt;/span&gt;&lt;span class="nx"&gt;require&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;should&amp;#39;&lt;/span&gt;
 
 &lt;span class="nx"&gt;describe&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;Sofas API&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nf"&gt;-&amp;gt;&lt;/span&gt;
 
@@ -180,11 +173,10 @@ npm install mock-couch coffee-script gulp gulp-mocha should supertest express na
     &lt;span class="nx"&gt;it&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;should return a particular sofa with GET&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nf"&gt;-&amp;gt;&lt;/span&gt;
       &lt;span class="c1"&gt;# TODO: write test&lt;/span&gt;
       &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kc"&gt;false&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;should&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;be&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;true&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;If you run the tests right now, you should see similar&amp;nbsp;output:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;gulp &lt;span class="nb"&gt;test&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;gulp &lt;span class="nb"&gt;test&lt;/span&gt;
 
   Sofas API
     /sofas
@@ -209,22 +201,20 @@ npm install mock-couch coffee-script gulp gulp-mocha should supertest express na
 
 Message:
     &lt;span class="m"&gt;2&lt;/span&gt; tests failed.
-&lt;/pre&gt;&lt;/div&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h2&gt;Implementation&lt;/h2&gt;
 &lt;p&gt;Sofas will be stored in CouchDB with the following&amp;nbsp;structure:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="p"&gt;{&lt;/span&gt;
     &lt;span class="nt"&gt;&amp;quot;_id&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;CouchDB assigned id&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
     &lt;span class="nt"&gt;&amp;quot;_rev&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;CouchDB assigned revision&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
     &lt;span class="nt"&gt;&amp;quot;name&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Name of the sofa&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
     &lt;span class="nt"&gt;&amp;quot;price&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Price of the sofa&amp;quot;&lt;/span&gt;
 &lt;span class="p"&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;With this in mind, let&amp;#8217;s build a module for accessing the&amp;nbsp;database.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nv"&gt;nano = &lt;/span&gt;&lt;span class="nx"&gt;require&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;nano&amp;#39;&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nv"&gt;nano = &lt;/span&gt;&lt;span class="nx"&gt;require&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;nano&amp;#39;&lt;/span&gt;
 &lt;span class="nv"&gt;Q    = &lt;/span&gt;&lt;span class="nx"&gt;require&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;q&amp;#39;&lt;/span&gt;
 
 &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nx"&gt;DAL&lt;/span&gt;
@@ -312,11 +302,10 @@ Message:
 
 
 &lt;span class="nv"&gt;module.exports = &lt;/span&gt;&lt;span class="nx"&gt;DAL&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;What&amp;#8217;s missing is the endpoint and test implementation. Let&amp;#8217;s start with the&amp;nbsp;tests.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="gh"&gt;diff --git a/specs/sofas.spec.coffee b/specs/sofas.spec.coffee&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="gh"&gt;diff --git a/specs/sofas.spec.coffee b/specs/sofas.spec.coffee&lt;/span&gt;
 &lt;span class="gh"&gt;index 8c1eb84..efbff58 100644&lt;/span&gt;
 &lt;span class="gd"&gt;--- a/specs/sofas.spec.coffee&lt;/span&gt;
 &lt;span class="gi"&gt;+++ b/specs/sofas.spec.coffee&lt;/span&gt;
@@ -382,11 +371,10 @@ Message:
 &lt;span class="gi"&gt;+          sofa.should.have.property(&amp;#39;price&amp;#39;)&lt;/span&gt;
 &lt;span class="gi"&gt;+&lt;/span&gt;
 &lt;span class="gi"&gt;+        .end done&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Now the&amp;nbsp;endpoints:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="gh"&gt;diff --git a/server.coffee b/server.coffee&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="gh"&gt;diff --git a/server.coffee b/server.coffee&lt;/span&gt;
 &lt;span class="gh"&gt;index 98f1918..a0d30ce 100644&lt;/span&gt;
 &lt;span class="gd"&gt;--- a/server.coffee&lt;/span&gt;
 &lt;span class="gi"&gt;+++ b/server.coffee&lt;/span&gt;
@@ -416,11 +404,10 @@ Message:
 
 
  exports.listen = (callback) -&amp;gt;
-&lt;/pre&gt;&lt;/div&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;At this point we can execute &lt;em&gt;gulp test-int&lt;/em&gt; command to run tests on real&amp;nbsp;CouchDB:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;gulp test-int
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;gulp test-int
 
   Sofas API
     /sofas
@@ -430,14 +417,13 @@ Message:
 
 
   &lt;span class="m"&gt;2&lt;/span&gt; passing &lt;span class="o"&gt;(&lt;/span&gt;204ms&lt;span class="o"&gt;)&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h2&gt;mock-couch&amp;nbsp;tests&lt;/h2&gt;
 &lt;p&gt;So how do we use mock-couch for this? Mock-couch is an &lt;span class="caps"&gt;HTTP&lt;/span&gt; server based on &lt;a href="http://mcavage.me/node-restify/"&gt;Restify&lt;/a&gt;. Note that &lt;a href="https://nodejs.org/"&gt;Node.js&lt;/a&gt; runtime is single-threaded therefore we won&amp;#8217;t be able to run both express and mock-couch at the same time. However, it is possible to run mock-couch on another&amp;nbsp;process.&lt;/p&gt;
 &lt;p&gt;Node provides a couple of ways to create processes out of the box. We&amp;#8217;ll use one called &lt;a href="https://nodejs.org/api/child_process.html#child_process_child_process_fork_modulepath_args_options"&gt;forking&lt;/a&gt;: not only we&amp;#8217;ll be able to control the lifecycle of the forked child process but we&amp;#8217;ll also have the ability to send and receive messages between parent and the&amp;nbsp;child.&lt;/p&gt;
 &lt;p&gt;&lt;span class="caps"&gt;OK&lt;/span&gt;, less talk and more forking. We&amp;#8217;ll do the forking in &lt;em&gt;gulp test&lt;/em&gt;&amp;nbsp;task:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="gh"&gt;diff --git a/gulpfile.coffee b/gulpfile.coffee&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="gh"&gt;diff --git a/gulpfile.coffee b/gulpfile.coffee&lt;/span&gt;
 &lt;span class="gh"&gt;index cbd61b5..1200834 100644&lt;/span&gt;
 &lt;span class="gd"&gt;--- a/gulpfile.coffee&lt;/span&gt;
 &lt;span class="gi"&gt;+++ b/gulpfile.coffee&lt;/span&gt;
@@ -492,11 +478,10 @@ Message:
 
  # Task to run integration tests (real CouchDB backend)
  gulp.task &amp;#39;test-int&amp;#39;, -&amp;gt;
-&lt;/pre&gt;&lt;/div&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Also, we need a slight change to the test&amp;nbsp;setup:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="gh"&gt;diff --git a/specs/sofas.spec.coffee b/specs/sofas.spec.coffee&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="gh"&gt;diff --git a/specs/sofas.spec.coffee b/specs/sofas.spec.coffee&lt;/span&gt;
 &lt;span class="gh"&gt;index efbff58..93e7bd2 100644&lt;/span&gt;
 &lt;span class="gd"&gt;--- a/specs/sofas.spec.coffee&lt;/span&gt;
 &lt;span class="gi"&gt;+++ b/specs/sofas.spec.coffee&lt;/span&gt;
@@ -524,12 +509,11 @@ Message:
 
    # Close express server after each test
    afterEach (done) -&amp;gt;
-&lt;/pre&gt;&lt;/div&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h2&gt;Moment of&amp;nbsp;Truth&lt;/h2&gt;
 &lt;p&gt;If you try running &lt;code&gt;gulp test&lt;/code&gt; right now, you should see similar&amp;nbsp;output:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;gulp &lt;span class="nb"&gt;test&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;gulp &lt;span class="nb"&gt;test&lt;/span&gt;
 
   Sofas API
     /sofas
@@ -539,8 +523,7 @@ Message:
 
 
   &lt;span class="m"&gt;2&lt;/span&gt; passing &lt;span class="o"&gt;(&lt;/span&gt;178ms&lt;span class="o"&gt;)&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;As you can see the tests completed slightly faster than with real CouchDB. In a small code base like this, it&amp;#8217;s hardly worth switching to mock-couch, if execution speed is your only motivation. However, with bigger codebases, the speed improvement can become very&amp;nbsp;apparent.&lt;/p&gt;
 &lt;p&gt;Besides speed, there&amp;#8217;s another benefit to this approach: you don&amp;#8217;t actually need CouchDB to test your project. The simplified build process is especially useful with Continuous Integration platforms like &lt;a href="http://travis-ci.org/"&gt;Travis &lt;span class="caps"&gt;CI&lt;/span&gt;&lt;/a&gt; and &lt;a href="https://codeship.com"&gt;Codeship&lt;/a&gt;.&lt;/p&gt;
@@ -548,7 +531,7 @@ Message:
 &lt;ul&gt;
 &lt;li&gt;&lt;a href="https://github.com/reederz/express-mock-couch-showcase"&gt;Code on&amp;nbsp;GitHub&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://github.com/chris-l/mock-couch"&gt;mock-couch&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><category term="couchdb"></category><category term="mock-couch"></category><category term="express"></category><category term="javascript"></category><category term="nodejs"></category></entry><entry><title>I got hired by Toptal</title><link href="http://reederz.com/got-hired-by-toptal.html" rel="alternate"></link><published>2016-09-13T13:30:00+02:00</published><updated>2016-09-13T13:30:00+02:00</updated><author><name>Justas Ažna</name></author><id>tag:reederz.com,2016-09-13:/got-hired-by-toptal.html</id><summary type="html">&lt;p class="first last"&gt;I became a freelance software engineer at&amp;nbsp;toptal.com&lt;/p&gt;
+&lt;/ul&gt;</content><category term="archive"></category><category term="couchdb"></category><category term="mock-couch"></category><category term="express"></category><category term="javascript"></category><category term="nodejs"></category></entry><entry><title>I got hired by Toptal</title><link href="http://reederz.com/got-hired-by-toptal.html" rel="alternate"></link><published>2016-09-13T13:30:00+02:00</published><updated>2016-09-13T13:30:00+02:00</updated><author><name>Justas Ažna</name></author><id>tag:reederz.com,2016-09-13:/got-hired-by-toptal.html</id><summary type="html">&lt;p class="first last"&gt;I became a freelance software engineer at&amp;nbsp;toptal.com&lt;/p&gt;
 </summary><content type="html">&lt;p&gt;A few weeks ago, I passed my last screening stage for &lt;a class="reference external" href="https://www.toptal.com/#select-just-spectacular-programmers-now"&gt;toptal.com&lt;/a&gt; software freelancing platform. Unlike other similar platforms, such as &lt;a class="reference external" href="https://upwork.com"&gt;upwork&lt;/a&gt; and &lt;a class="reference external" href="https://freelancer.com"&gt;freelancer.com&lt;/a&gt;, this one is pretty hard to get in. They hire top 3% of freelance talent and they have a tough interviewing process to ensure&amp;nbsp;that.&lt;/p&gt;
 &lt;p&gt;First of all, why would you want to be a part of toptal? I&amp;#8217;ve tried a couple other freelancing platforms and I didn&amp;#8217;t really like them that much. Since there is little to no skill assesment of the freelancers and a huge competition, you have to invest a lot of effort into justifying your skills to the clients every single time. Toptal is different. Because of the hard screening process, merely by passing it you have proven that you are good at what you do (and the clients know&amp;nbsp;that).&lt;/p&gt;
 &lt;p&gt;The screening process itself has &lt;a class="reference external" href="https://www.toptal.com/top-3-percent#select-just-spectacular-programmers-now"&gt;4 stages&lt;/a&gt;:&lt;/p&gt;
@@ -561,7 +544,7 @@ Message:
 &lt;p&gt;The stages 2-4 were the most challenging and I&amp;#8217;ve initially failed the 3rd stage because I ran out of time when doing the live coding. Fortunately, they let you retry it after 1 month and I was luckier with my second&amp;nbsp;attempt.&lt;/p&gt;
 &lt;p&gt;Once I got accepted and setup &lt;a class="reference external" href="https://www.toptal.com/resume/justas-azna#select-just-spectacular-programmers-now"&gt;my profile&lt;/a&gt; I could apply for jobs (yeah, you still have to do that). But since I was busy at the moment, I put it on hold. Even so, a few weeks later one of the recruiters found me an interview and after talking to the client I got hired as a Senior Software&amp;nbsp;Developer/Architect.&lt;/p&gt;
 &lt;p&gt;All in all, my short experience with Toptal is very good and I&amp;#8217;m happy to have joined their network. Go ahead and check them out, if you are &lt;a class="reference external" href="https://www.toptal.com/talent/apply#select-just-spectacular-programmers-now"&gt;looking for challening and exciting software projects&lt;/a&gt; or &lt;a class="reference external" href="https://www.toptal.com/companies/apply#select-just-spectacular-programmers-now"&gt;are in need of help with one&lt;/a&gt;.&lt;/p&gt;
-</content><category term="freelancing"></category><category term="toptal"></category></entry><entry><title>Coursera - Cryptography I</title><link href="http://reederz.com/coursera-crypto1.html" rel="alternate"></link><published>2015-07-07T11:30:00+02:00</published><updated>2015-07-07T11:30:00+02:00</updated><author><name>Justas Ažna</name></author><id>tag:reederz.com,2015-07-07:/coursera-crypto1.html</id><summary type="html">&lt;p class="first last"&gt;I have recently finished Cryptography I - an online course by Prof. Dan Boneh on Coursera.org. Here&amp;#8217;s what I have&amp;nbsp;learnt.&lt;/p&gt;
+</content><category term="blog"></category><category term="freelancing"></category><category term="toptal"></category></entry><entry><title>Coursera - Cryptography I</title><link href="http://reederz.com/coursera-crypto1.html" rel="alternate"></link><published>2015-07-07T11:30:00+02:00</published><updated>2015-07-07T11:30:00+02:00</updated><author><name>Justas Ažna</name></author><id>tag:reederz.com,2015-07-07:/coursera-crypto1.html</id><summary type="html">&lt;p class="first last"&gt;I have recently finished Cryptography I - an online course by Prof. Dan Boneh on Coursera.org. Here&amp;#8217;s what I have&amp;nbsp;learnt.&lt;/p&gt;
 </summary><content type="html">&lt;p&gt;I have recently finished &lt;a class="reference external" href="https://www.coursera.org/course/crypto"&gt;Cryptography I&lt;/a&gt; - an introductory online course  on Cryptography by Prof. Dan Boneh of Stanford and today I received my fancy &lt;a class="reference external" href="/docs/coursera/crypto1.pdf"&gt;Statement of Accomplishment&lt;/a&gt;. It was an interesting and challenging&amp;nbsp;experience.&lt;/p&gt;
 &lt;p&gt;The course took 6 weeks and covered Stream and Block Ciphers, Message Integrity, Authenticated Encryption, Basic Key Exchange and Public Key Encryption. We have discussed several formal security definitions such as Semantic Security, Chosen Plaintext Security, Chosen Ciphertext Security, Collision Resistance; each of which were used to describe security of different cryptographic&amp;nbsp;primitives.&lt;/p&gt;
 &lt;p&gt;Each week we would have a problem set which usually consisted of multiple-choice questions and an optional programming assignment. The programming assignments were especially great: we got to break poorly used cryptography and practice using various crypto algorithms I.e. we have broken many-time-pad, exploited &lt;span class="caps"&gt;CBC&lt;/span&gt; padding oracle vulnerabilities, factored &lt;span class="caps"&gt;RSA&lt;/span&gt; modulus with poorly generated prime factors and&amp;nbsp;more.&lt;/p&gt;
@@ -575,4 +558,4 @@ Message:
 &lt;p&gt;While this course is really fun, it&amp;#8217;s not something that you can do casually. It would take me 6-12 quality hours every week to watch the lectures and finish the course work. It&amp;#8217;s actually my second attempt- the first time I gave up because my schedule was too hectic and I didn&amp;#8217;t want to invest half ass effort into this (all or nothing&amp;nbsp;:).&lt;/p&gt;
 &lt;p&gt;Before crypto1, I had a course on computer security in college, read books like &lt;a class="reference external" href="https://www.goodreads.com/book/show/29608.The_Codebreakers"&gt;The Codebreakers by David Khan&lt;/a&gt; and &lt;a class="reference external" href="https://www.goodreads.com/book/show/9319468-kingpin"&gt;Kingpin by Kevin Poulsen&lt;/a&gt;, dabbled with hacking challenges on &lt;a class="reference external" href="https://www.hackthissite.org/"&gt;HackThisSite&lt;/a&gt; and had some experience from my sysadmin/webdev work. Shortly: I knew a bit more than average Joe. Well, this course made me feel like I know nothing about crypto (in a good way) and that was a really sobering experience. It&amp;#8217;s definitely going to affect my decisions both as webdev and as a web&amp;nbsp;citizen.&lt;/p&gt;
 &lt;p&gt;As a final note, I want to thank Prof. Dan Boneh- you really know your stuff and I admire your work. I look forward to &lt;a class="reference external" href="https://www.coursera.org/course/crypto2"&gt;Cryptography &lt;span class="caps"&gt;II&lt;/span&gt;&lt;/a&gt; in&amp;nbsp;October.&lt;/p&gt;
-</content><category term="coursera"></category><category term="crypto"></category></entry></feed>
+</content><category term="blog"></category><category term="coursera"></category><category term="crypto"></category></entry></feed>
